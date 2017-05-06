@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="{Binding Title}"
+    x:Class="WhoseShoutFormsPrism.Views.LoginPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <Style TargetType="Entry">
+                    <Setter Property="Margin" Value="40,10" />
+                </Style>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <StackLayout Grid.Row="0" VerticalOptions="FillAndExpand">
+            <Entry Text="{Binding UserName}" Placeholder="Enter the username" VerticalOptions="EndAndExpand" />
+            <Entry Text="{Binding Password}" IsPassword="true" Placeholder="Password" VerticalOptions="StartAndExpand" />
+            <Button Text="Submit" Command="{Binding LoginCommand}" />
+        </StackLayout>
+    </Grid>
+</ContentPage>

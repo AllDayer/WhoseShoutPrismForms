@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="{Binding Title}"
+    x:Class="WhoseShoutFormsPrism.Views.SummaryPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
+    </ContentPage.ToolbarItems>
+    <StackLayout BackgroundColor="Lime">
+        <Label Text="{Binding Message}" />
+        <Label Text="{Binding ShoutName}"/>
+        <Label Text="{Binding User1}"/>
+        <Label Text="{Binding User2}"/>
+        <Button Text="Buy Round" Command="{Binding BuyCommand}" />
+        <Button Text="New Shout" Command="{Binding NewShoutCommand}" />
+    </StackLayout>
+</ContentPage>
