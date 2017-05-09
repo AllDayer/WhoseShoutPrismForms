@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Prism.Navigation;
 using WhoseShoutFormsPrism.Models;
+using WhoseShoutWebService.Models;
 
 namespace WhoseShoutFormsPrism.ViewModels
 {
@@ -12,6 +13,8 @@ namespace WhoseShoutFormsPrism.ViewModels
     {
         INavigationService m_NavigationService;
         private Shout m_Shout = new Shout();
+
+        public List<ShoutUserDto> UsersForShout = new List<ShoutUserDto>();
 
         public BuyPageViewModel(INavigationService navigationService) : base(navigationService)
         {
@@ -73,11 +76,28 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
         }
 
+        public String FirstUser
+
+        {
+            get
+            {
+                if (UsersForShout.Count > 0)
+                    return UsersForShout[0].UserName;
+
+                return "";
+            }
+        }
+
         public override void OnNavigatedTo(NavigationParameters parameters)
         {
             m_Shout = (Shout)parameters["model"];
             RaisePropertyChanged(nameof(GroupID));
             RaisePropertyChanged(nameof(ID));
+
+            UsersForShout.AddRange((List<ShoutUserDto>)parameters["users"]);
+            OnPropertyChanged(nameof(UsersForShout));
+            RaisePropertyChanged(nameof(UsersForShout));
+            RaisePropertyChanged(nameof(FirstUser));
         }
 
         public override void OnNavigatingTo(NavigationParameters parameters)

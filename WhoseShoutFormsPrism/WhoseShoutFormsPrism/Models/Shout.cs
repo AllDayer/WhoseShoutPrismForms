@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WhoseShoutFormsPrism.Models
 {
@@ -10,8 +6,10 @@ namespace WhoseShoutFormsPrism.Models
     {
         public Guid ID { get; set; }
         public Guid ShoutGroupID { get; set; }
-        public Guid UserID { get; set; }
+        public Guid ShoutUserID { get; set; }
         public DateTime PurchaseTimeUtc { get; set; }
         public float Cost { get; set; }
+        public ShoutGroup ShoutGroup { get; set; }
+        public ShoutUser ShoutUser { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace WhoseShoutFormsPrism.Models
         public Guid ID { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
-        public List<User> Users { get; set; }
+        public List<ShoutUser> ShoutUsers { get; set; }
         public List<Shout> Shouts { get; set; }
     }
 }

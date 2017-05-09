@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace WhoseShoutFormsPrism.Models
 {
-    public class User
+    public class ShoutUser
     {
         public Guid ID { get; set; }
         public String UserName { get; set; }
+        public List<ShoutGroup> ShoutGroups { get; set; }
+        public List<Shout> Shouts { get; set; }
     }
 }

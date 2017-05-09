@@ -13,7 +13,10 @@
         <Label Text="{Binding GroupID}"/>
         <Entry Placeholder="Cost" Text="{Binding Cost}"/>
 
+        <Picker ItemsSource="{Binding UsersForShout}" ItemDisplayBinding="{Binding UserName}"/>
         <Button Text="Buy" Command="{Binding BuyCommand}"/>
+
+        <Label Text="{Binding FirstUser}"/>
     </StackLayout>
 
 </ContentPage>

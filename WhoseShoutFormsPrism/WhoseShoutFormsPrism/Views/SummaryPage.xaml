@@ -9,6 +9,10 @@
     </ContentPage.ToolbarItems>
     <StackLayout BackgroundColor="Lime">
         <Label Text="{Binding Message}" />
+        <Label Text="Shout Group Name" />
+        <Label Text="{Binding ShoutGroupDto.Name}" />
+        
+        
         <Label Text="{Binding ShoutName}"/>
         <Label Text="{Binding User1}"/>
         <Label Text="{Binding User2}"/>

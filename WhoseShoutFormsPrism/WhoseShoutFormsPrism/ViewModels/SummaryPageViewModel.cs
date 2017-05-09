@@ -6,6 +6,8 @@ using WhoseShoutFormsPrism.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WhoseShoutWebService.Models;
+using System.Threading.Tasks;
 
 namespace WhoseShoutFormsPrism.ViewModels
 {
@@ -14,55 +16,44 @@ namespace WhoseShoutFormsPrism.ViewModels
         public List<ShoutGroup> ShoutGroups { get; set; }
 
         IAuthenticationService _authenticationService { get; }
-        public SummaryPageViewModel(INavigationService navigationService, IAuthenticationService authenticationService)
-            : base(navigationService)
-        {
-            MockData();
-            Title = "Summary";
-            _authenticationService = authenticationService;
-            LogoutCommand = new DelegateCommand(OnLogoutCommandExecuted);
-            NewShoutCommand = new DelegateCommand(OnNewShoutCommandExecuted);
-            BuyCommand = new DelegateCommand(OnBuyCommandExecuted);
 
-            ShoutName =ShoutGroups[0].Name;
-            User1 = ShoutGroups[0].Users[0].UserName;
-            User2 = ShoutGroups[0].Users[1].UserName;
-        }
+        private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
 
-        private void MockData()
-        {
-            ShoutGroups = new List<ShoutGroup>();
-            ShoutGroups.Add(new ShoutGroup()
-            {
-                Name = "CoffeeTime!",
-                Category = "Coffee",
-                ID = new Guid("bf3641d1-a384-494d-a957-18f2aa42170c"),
-                Users = new List<User>()
-                {
-                    new User()
-                    {
-                        ID = new Guid("d9c91004-3994-4bb4-a703-267904985126"),
-                        UserName = "Tristan"
-                    },
-                    new User()
-                    {
-                        ID = new Guid("c9c9f88b-853b-46e5-a70a-fad212fab6b0"),
-                        UserName = "Norman"
-                    }
-                },
-                Shouts = new List<Shout>()
-                {
-                    new Shout()
-                    {
-                        ShoutGroupID = new Guid("bf3641d1-a384-494d-a957-18f2aa42170c"),
-                        ID = new Guid("45def82e-2b68-47e1-98c6-7d34906b46f1"),
-                        UserID = new Guid("d9c91004-3994-4bb4-a703-267904985126"),
-                        Cost = 9.0f,
-                        PurchaseTimeUtc = DateTime.UtcNow,
-                    }
-                }
-            });
-        }
+
+        //private void MockData()
+        //{
+        //    ShoutGroups = new List<ShoutGroup>();
+        //    ShoutGroups.Add(new ShoutGroup()
+        //    {
+        //        Name = "CoffeeTime!",
+        //        Category = "Coffee",
+        //        ID = new Guid("bf3641d1-a384-494d-a957-18f2aa42170c"),
+        //        ShoutUsers = new List<ShoutUser>()
+        //        {
+        //            new ShoutUser()
+        //            {
+        //                ID = new Guid("d9c91004-3994-4bb4-a703-267904985126"),
+        //                UserName = "Tristan"
+        //            },
+        //            new ShoutUser()
+        //            {
+        //                ID = new Guid("c9c9f88b-853b-46e5-a70a-fad212fab6b0"),
+        //                UserName = "Norman"
+        //            }
+        //        },
+        //        Shouts = new List<Shout>()
+        //        {
+        //            new Shout()
+        //            {
+        //                ShoutGroupID = new Guid("bf3641d1-a384-494d-a957-18f2aa42170c"),
+        //                ID = new Guid("45def82e-2b68-47e1-98c6-7d34906b46f1"),
+        //                ShoutUserID = new Guid("d9c91004-3994-4bb4-a703-267904985126"),
+        //                Cost = 9.0f,
+        //                PurchaseTimeUtc = DateTime.UtcNow,
+        //            }
+        //        }
+        //    });
+        //}
 
         private string _message;
         public string Message
@@ -101,6 +92,40 @@ namespace WhoseShoutFormsPrism.ViewModels
             Message = parameters.GetValue<string>("message");
         }
 
+        private ShoutGroupDto m_ShoutGroupDto;
+        public ShoutGroupDto ShoutGroupDto
+        {
+            get { return m_ShoutGroupDto; }
+            set { SetProperty(ref m_ShoutGroupDto, value); }
+        }
+
+        public SummaryPageViewModel(INavigationService navigationService, IAuthenticationService authenticationService)
+            : base(navigationService)
+        {
+            Title = "Summary";
+            _authenticationService = authenticationService;
+            LogoutCommand = new DelegateCommand(OnLogoutCommandExecuted);
+            NewShoutCommand = new DelegateCommand(OnNewShoutCommandExecuted);
+            BuyCommand = new DelegateCommand(OnBuyCommandExecuted);
+
+            LoadData();
+            //ShoutName = ShoutGroups[0].Name;
+            //User1 = ShoutGroups[0].ShoutUsers[0].UserName;
+            //User2 = ShoutGroups[0].ShoutUsers[1].UserName;
+        }
+
+        public async void LoadData()
+        {
+            var groups = await LoadGroups(TristanUserString);
+        }
+
+        public async Task<List<ShoutGroupDto>> LoadGroups(String userID)
+        {
+            var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(userID);
+            ShoutGroupDto = groups.First();
+            return groups;
+        }
+
         public void OnLogoutCommandExecuted() =>
             _authenticationService.Logout();
 
@@ -112,7 +137,8 @@ namespace WhoseShoutFormsPrism.ViewModels
         public async void OnBuyCommandExecuted()
         {
             NavigationParameters nav = new NavigationParameters();
-            nav.Add("model", new Shout() { ID = Guid.NewGuid(), ShoutGroupID = this.ShoutGroups[0].ID });
+            nav.Add("model", new Shout() { ID = Guid.NewGuid(), ShoutGroupID = ShoutGroupDto.ID });
+            nav.Add("users", ShoutGroupDto.Users );
             await _navigationService.NavigateAsync("MainPage/BuyPage", nav);
         }
     }
