@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WhoseShoutWebService.Models;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace WhoseShoutFormsPrism.ViewModels
 {
@@ -15,10 +16,18 @@ namespace WhoseShoutFormsPrism.ViewModels
     {
         public List<ShoutGroup> ShoutGroups { get; set; }
 
+        public List<ShoutDto> ShoutsForGroup { get; set; }
+
         IAuthenticationService _authenticationService { get; }
 
         private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
 
+        private ShoutUserDto m_WhoseShout;
+        public ShoutUserDto WhoseShout
+        {
+            get { return m_WhoseShout; }
+            set { SetProperty(ref m_WhoseShout, value); }
+        }
 
         //private void MockData()
         //{
@@ -90,6 +99,8 @@ namespace WhoseShoutFormsPrism.ViewModels
         public override void OnNavigatedTo(NavigationParameters parameters)
         {
             Message = parameters.GetValue<string>("message");
+
+            LoadData();
         }
 
         private ShoutGroupDto m_ShoutGroupDto;
@@ -114,9 +125,55 @@ namespace WhoseShoutFormsPrism.ViewModels
             //User2 = ShoutGroups[0].ShoutUsers[1].UserName;
         }
 
+        public override void OnNavigatingTo(NavigationParameters parameters)
+        {
+            base.OnNavigatingTo(parameters);
+        }
+
         public async void LoadData()
         {
             var groups = await LoadGroups(TristanUserString);
+            ShoutsForGroup = await LoadShoutsForGroup(ShoutGroupDto.ID.ToString());
+            CalculateWhoseShout(ShoutGroupDto.ID);
+        }
+
+        private void CalculateWhoseShout(Guid shoutGuid)
+        {
+            int max = 0;
+            int min = int.MaxValue;
+            int lowestShoutCount = int.MaxValue;
+
+            ShoutUserDto whoseShout = null;
+            List<ShoutUserDto> tiedShout = new List<ShoutUserDto>();
+
+            List<Guid> userGuids = new List<Guid>();
+            foreach (var u in ShoutGroupDto.Users)
+            {
+                var shoutCount = ShoutsForGroup.Count(x => x.ShoutUserID == u.ID);
+                if (shoutCount < lowestShoutCount)
+                {
+                    whoseShout = u;
+                    lowestShoutCount = shoutCount;
+                    tiedShout.Clear();
+                }
+                else if (shoutCount == lowestShoutCount)
+                {
+                    tiedShout.Add(u);
+                }
+            }
+
+            if (tiedShout.Count > 0)
+            {
+                tiedShout.Add(whoseShout);
+                WhoseShout = (from x in ShoutsForGroup
+                              join tied in tiedShout on x.ShoutUserID equals tied.ID
+                              orderby x.PurchaseTimeUtc ascending
+                              select tied).FirstOrDefault();
+            } 
+            else
+            {
+                WhoseShout = whoseShout;
+            }
         }
 
         public async Task<List<ShoutGroupDto>> LoadGroups(String userID)
@@ -126,8 +183,12 @@ namespace WhoseShoutFormsPrism.ViewModels
             return groups;
         }
 
-        public void OnLogoutCommandExecuted() =>
-            _authenticationService.Logout();
+        public async Task<List<ShoutDto>> LoadShoutsForGroup(String groupID)
+        {
+            return await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutsForGroup(groupID);
+        }
+
+        public void OnLogoutCommandExecuted() => _authenticationService.Logout();
 
         public async void OnNewShoutCommandExecuted()
         {
@@ -137,8 +198,8 @@ namespace WhoseShoutFormsPrism.ViewModels
         public async void OnBuyCommandExecuted()
         {
             NavigationParameters nav = new NavigationParameters();
-            nav.Add("model", new Shout() { ID = Guid.NewGuid(), ShoutGroupID = ShoutGroupDto.ID });
-            nav.Add("users", ShoutGroupDto.Users );
+            nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = ShoutGroupDto.ID });
+            nav.Add("users", ShoutGroupDto.Users);
             await _navigationService.NavigateAsync("MainPage/BuyPage", nav);
         }
     }

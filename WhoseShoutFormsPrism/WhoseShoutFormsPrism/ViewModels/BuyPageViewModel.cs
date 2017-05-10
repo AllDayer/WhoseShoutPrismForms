@@ -6,22 +6,23 @@ using System.Linq;
 using Prism.Navigation;
 using WhoseShoutFormsPrism.Models;
 using WhoseShoutWebService.Models;
+using System.Collections.ObjectModel;
 
 namespace WhoseShoutFormsPrism.ViewModels
 {
     public class BuyPageViewModel : BaseViewModel
     {
         INavigationService m_NavigationService;
-        private Shout m_Shout = new Shout();
+        private ShoutDto m_Shout = new ShoutDto();
 
-        public List<ShoutUserDto> UsersForShout = new List<ShoutUserDto>();
+        public ObservableCollection<ShoutUserDto> UsersForShout = new ObservableCollection<ShoutUserDto>();
 
         public BuyPageViewModel(INavigationService navigationService) : base(navigationService)
         {
             m_NavigationService = navigationService;
             BuyCommand = new DelegateCommand(OnBuyCommandExecuted);
         }
-        
+
         public DelegateCommand BuyCommand { get; }
 
         public String ID
@@ -44,7 +45,7 @@ namespace WhoseShoutFormsPrism.ViewModels
                 return m_Shout.ShoutGroupID.ToString();
             }
         }
-        
+
         public String Cost
         {
             get
@@ -60,13 +61,50 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
+        private string m_UserName;
+        public string UserName
+        {
+            get
+            {
+                return m_UserName;
+            }
+            set
+            {
+                m_UserName = value;
+                if (UsersForShout != null && UsersForShout.Count > 0)
+                {
+                    UserDto = UsersForShout.FirstOrDefault(x => x.UserName.StartsWith(value, StringComparison.OrdinalIgnoreCase));
+                }
+                RaisePropertyChanged(nameof(UserName));
+            }
+        }
 
+        private ShoutUserDto m_UserDto;
+        public ShoutUserDto UserDto
+        {
+            get
+            {
+                return m_UserDto;
+            }
+            set
+            {
+                m_UserDto = value;
+                RaisePropertyChanged(nameof(UserDto));
+            }
+        }
+
+        private ShoutGroupDto m_Group;
 
         public async void OnBuyCommandExecuted()
         {
             m_Shout.PurchaseTimeUtc = DateTime.UtcNow;
+            m_Shout.ShoutUserID = UserDto.ID;
+            m_Shout.ShoutGroupID = new Guid(GroupID);
+            m_Shout.Cost = (float.Parse(Cost));
+
             //Save sync item
             //Sync with server
+            await CurrentApp.Current.MainViewModel.ServiceApi.NewShout(m_Shout);
 
             //Return
             m_NavigationService.GoBackAsync();
@@ -76,32 +114,23 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
         }
 
-        public String FirstUser
-
-        {
-            get
-            {
-                if (UsersForShout.Count > 0)
-                    return UsersForShout[0].UserName;
-
-                return "";
-            }
-        }
-
+        
         public override void OnNavigatedTo(NavigationParameters parameters)
         {
-            m_Shout = (Shout)parameters["model"];
+            m_Shout = (ShoutDto)parameters["model"];
             RaisePropertyChanged(nameof(GroupID));
             RaisePropertyChanged(nameof(ID));
 
-            UsersForShout.AddRange((List<ShoutUserDto>)parameters["users"]);
-            OnPropertyChanged(nameof(UsersForShout));
-            RaisePropertyChanged(nameof(UsersForShout));
-            RaisePropertyChanged(nameof(FirstUser));
+            foreach (var u in ((List<ShoutUserDto>)parameters["users"]))
+            {
+                UsersForShout.Add(u);
+            }
+            RaisePropertyChanged("UserName");
         }
 
         public override void OnNavigatingTo(NavigationParameters parameters)
         {
+
         }
     }
 }

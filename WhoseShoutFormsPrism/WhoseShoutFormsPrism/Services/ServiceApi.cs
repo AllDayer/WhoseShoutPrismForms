@@ -76,5 +76,39 @@ namespace WhoseShoutFormsPrism.Services
                 return null;
             }
         }
+
+        public async Task<List<ShoutDto>> GetShoutsForGroup(string groupId)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await client.GetAsync("api/shouts?groupid=" + groupId);
+                    response.EnsureSuccessStatusCode();
+                    return await ReadAsAsync<List<ShoutDto>>(response.Content);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        
+
+        public async Task NewShout(ShoutDto shout)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await PostAsJsonAsync(client, "api/shouts", shout);
+                    response.EnsureSuccessStatusCode();
+                }
+            }
+            catch(Exception)
+            {
+                return;
+            }
+        }
     }
 }

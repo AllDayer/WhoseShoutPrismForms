@@ -14,8 +14,10 @@
         
         
         <Label Text="{Binding ShoutName}"/>
-        <Label Text="{Binding User1}"/>
-        <Label Text="{Binding User2}"/>
+
+        <Label Text="Whose shout?"/>
+        <Label Text="{Binding WhoseShout.UserName}"/>
+
         <Button Text="Buy Round" Command="{Binding BuyCommand}" />
         <Button Text="New Shout" Command="{Binding NewShoutCommand}" />
     </StackLayout>

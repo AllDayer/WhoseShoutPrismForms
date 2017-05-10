@@ -6,5 +6,10 @@ namespace WhoseShoutWebService.Models
     {
         public Guid ID { get; set; }
         public String UserName { get; set; }
+
+        public override string ToString()
+        {
+            return UserName;
+        }
     }
 }
