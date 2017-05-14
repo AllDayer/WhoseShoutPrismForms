@@ -8,5 +8,6 @@ namespace WhoseShoutFormsPrism.Views
         {
             InitializeComponent();
         }
+        
     }
 }

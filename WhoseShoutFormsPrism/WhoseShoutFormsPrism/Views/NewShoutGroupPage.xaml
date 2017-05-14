@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
+             x:Class="WhoseShoutFormsPrism.Views.NewShoutGroupPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
+    </ContentPage.ToolbarItems>
+    <StackLayout>
+        <Label Text="New group name" />
+        <Entry Placeholder="New group name" Text="{Binding ShoutName}"/>
+
+        <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}" />
+
+        <Button Text="Add User" Command="{Binding AddUserToGroupCommand}"/>
+
+        <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
+        <Button Text="Create" Command="{Binding CreateGroupCommand}"/>
+
+
+    </StackLayout>
+</ContentPage>

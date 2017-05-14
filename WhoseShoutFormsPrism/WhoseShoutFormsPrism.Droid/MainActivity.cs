@@ -22,6 +22,12 @@ namespace WhoseShoutFormsPrism.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            Xamarin.Auth.Presenters.OAuthLoginPresenter.PlatformLogin = (authenticator) =>
+            {
+                var oAuthLogin = new OAuthLoginPresenter();
+                oAuthLogin.Login(authenticator);
+            };
+
             LoadApplication(new App(new AndroidInitializer()));
         }
     }

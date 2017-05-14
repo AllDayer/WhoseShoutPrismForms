@@ -15,9 +15,6 @@ namespace WhoseShoutFormsPrism.Services
         public string Token { get; set; }
         public string Url { get; set; } = "http://whoseshoutwebservice20170509074122.azurewebsites.net";
 
-        private string m_Username = "";
-        private string m_Password = "";
-
         private async Task<T> ReadAsAsync<T>(HttpContent content)
         {
             string contentString = await content.ReadAsStringAsync();
@@ -60,6 +57,56 @@ namespace WhoseShoutFormsPrism.Services
             return client;
         }
 
+        public async Task<ShoutUserDto> GetShoutUserBySocial(ShoutUserDto user)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await client.GetAsync("api/shoutusers?socialId=" + user.ShoutSocialID + "&authType=" + user.AuthType);
+                    response.EnsureSuccessStatusCode();
+                    return await ReadAsAsync<ShoutUserDto>(response.Content);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> NewShoutUser(ShoutUserDto user)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await PostAsJsonAsync(client, "api/shoutusers", user);
+                    response.EnsureSuccessStatusCode();
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task CreateGroupCommand(ShoutGroupDto group)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await PostAsJsonAsync(client, "api/shoutgroups", group);
+                    response.EnsureSuccessStatusCode();
+                }
+            }
+            catch (Exception )
+            {
+                return;
+            }
+        }
+
         public async Task<List<ShoutGroupDto>> GetShoutGroups(string userId)
         {
             try
@@ -71,7 +118,7 @@ namespace WhoseShoutFormsPrism.Services
                     return await ReadAsAsync<List<ShoutGroupDto>>(response.Content);
                 }
             }
-            catch (Exception)
+            catch (Exception )
             {
                 return null;
             }

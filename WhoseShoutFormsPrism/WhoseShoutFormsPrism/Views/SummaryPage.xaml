@@ -3,22 +3,17 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="{Binding Title}"
+    xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
     x:Class="WhoseShoutFormsPrism.Views.SummaryPage">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
-    <StackLayout BackgroundColor="Lime">
-        <Label Text="{Binding Message}" />
-        <Label Text="Shout Group Name" />
-        <Label Text="{Binding ShoutGroupDto.Name}" />
-        
-        
-        <Label Text="{Binding ShoutName}"/>
+    <StackLayout x:Name="Anchor" >
 
-        <Label Text="Whose shout?"/>
-        <Label Text="{Binding WhoseShout.UserName}"/>
+        <Label Text="It looks like you're not in any groups. Add a group to start tracking!" IsVisible="{Binding NoGroups}" Margin="20"/>
 
-        <Button Text="Buy Round" Command="{Binding BuyCommand}" />
-        <Button Text="New Shout" Command="{Binding NewShoutCommand}" />
+        <control:GroupRepeaterView x:Name="repeater" />
+
+        <Button Text="New Group" Command="{Binding NewShoutCommand}" VerticalOptions="StartAndExpand"/>
     </StackLayout>
 </ContentPage>

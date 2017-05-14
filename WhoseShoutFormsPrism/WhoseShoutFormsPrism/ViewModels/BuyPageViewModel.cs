@@ -93,8 +93,6 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
-        private ShoutGroupDto m_Group;
-
         public async void OnBuyCommandExecuted()
         {
             m_Shout.PurchaseTimeUtc = DateTime.UtcNow;
@@ -107,7 +105,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             await CurrentApp.Current.MainViewModel.ServiceApi.NewShout(m_Shout);
 
             //Return
-            m_NavigationService.GoBackAsync();
+            await m_NavigationService.GoBackAsync();
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)

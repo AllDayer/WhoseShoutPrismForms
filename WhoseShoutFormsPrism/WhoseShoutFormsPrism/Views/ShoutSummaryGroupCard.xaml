@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
+             x:Class="WhoseShoutFormsPrism.Views.ShoutSummaryGroupCard">
+    <ContentView.Content>
+        <StackLayout>
+            <control:CardView>
+                <StackLayout Padding="10" Spacing="10">
+                    <Label Text="{Binding Message}" />
+                    <Label Text="Shout Group Name" />
+                    <Label Text="{Binding Name}" />
+
+
+                    <Label Text="{Binding ShoutName}"/>
+
+                    <Label Text="Whose shout?"/>
+                    <Label Text="{Binding WhoseShout.UserName}"/>
+                    <Button x:Name="BuyRound" Text="Buy Round" />
+                </StackLayout>
+            </control:CardView>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

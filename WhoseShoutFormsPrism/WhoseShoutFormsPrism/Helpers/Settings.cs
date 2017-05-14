@@ -4,6 +4,7 @@ using Plugin.Settings.Abstractions;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using WhoseShoutFormsPrism.Models;
 
 namespace WhoseShoutFormsPrism.Helpers
 {
@@ -55,6 +56,36 @@ namespace WhoseShoutFormsPrism.Helpers
         }
 
         public string UserName
+        {
+            get { return GetProperty<string>(); }
+            set { SetProperty(value); }
+        }
+
+        public Guid UserGuid
+        {
+            get { return GetProperty<Guid>(); }
+            set { SetProperty(value); }
+        }
+
+        public AuthType UserAuth
+        {
+            get { return GetProperty<AuthType>(); }
+            set { SetProperty(value); }
+        }
+
+        public string SocialUserID
+        {
+            get { return GetProperty<string>(); }
+            set { SetProperty(value); }
+        }
+
+        public string UserFirstName
+        {
+            get { return GetProperty<string>(); }
+            set { SetProperty(value); }
+        }
+
+        public string UserEmail
         {
             get { return GetProperty<string>(); }
             set { SetProperty(value); }

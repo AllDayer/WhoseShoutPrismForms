@@ -5,31 +5,31 @@ using Xamarin.Forms;
 
 namespace WhoseShoutFormsPrism.Views
 {
-    public partial class SummaryPage : ContentPage
+    public partial class NewShoutGroupPage : ContentPage
     {
         private readonly IEventAggregator _ea;
 
-        public SummaryPage(IEventAggregator eventAggregator)
+        public NewShoutGroupPage(IEventAggregator eventAggregator)
         {
             InitializeComponent();
             _ea = eventAggregator;
-            _ea.GetEvent<GroupsLoadedEvent>().Subscribe(() => SetRepeater());
+            _ea.GetEvent<UserAddedToGroupEvent>().Subscribe(() => SetRepeater());
         }
 
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
         }
-        
+
         private void SetRepeater()
         {
             repeater.ParentVM = BindingContext;
-            repeater.ItemsSource = ((SummaryPageViewModel)this.BindingContext).ShoutGroups;
+            repeater.ItemsSource = ((NewShoutGroupPageViewModel)BindingContext).UsersInGroup;
         }
 
         protected override void OnDisappearing()
         {
-            _ea.GetEvent<GroupsLoadedEvent>().Unsubscribe(null);
+            _ea.GetEvent<UserAddedToGroupEvent>().Unsubscribe(null);
 
             base.OnDisappearing();
         }

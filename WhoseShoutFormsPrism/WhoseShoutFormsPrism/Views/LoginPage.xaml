@@ -21,6 +21,7 @@
             <Entry Text="{Binding UserName}" Placeholder="Enter the username" VerticalOptions="EndAndExpand" />
             <Entry Text="{Binding Password}" IsPassword="true" Placeholder="Password" VerticalOptions="StartAndExpand" />
             <Button Text="Submit" Command="{Binding LoginCommand}" />
+            <Button Text="OAuth" x:Name="OAuth" Command="{Binding OAuthCommand}"/>
         </StackLayout>
     </Grid>
 </ContentPage>

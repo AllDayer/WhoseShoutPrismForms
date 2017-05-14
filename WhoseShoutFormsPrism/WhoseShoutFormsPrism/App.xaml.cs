@@ -24,7 +24,7 @@ namespace WhoseShoutFormsPrism
             Container.RegisterTypeForNavigation<LoginPage>();
             Container.RegisterTypeForNavigation<SummaryPage>();
             Container.RegisterTypeForNavigation<BuyPage>();
-            Container.RegisterTypeForNavigation<NewShout>();
+            Container.RegisterTypeForNavigation<NewShoutGroupPage>();
 
             Container.Register<IAuthenticationService, AuthenticationService>(Reuse.Singleton);
 
