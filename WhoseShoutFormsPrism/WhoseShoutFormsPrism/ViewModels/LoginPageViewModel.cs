@@ -80,7 +80,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             {
                 account = accounts.FirstOrDefault();
             }
-            if (accounts == null)
+            if (account == null)
             {
                 _authenticationService.RegisterFacebook();
             }

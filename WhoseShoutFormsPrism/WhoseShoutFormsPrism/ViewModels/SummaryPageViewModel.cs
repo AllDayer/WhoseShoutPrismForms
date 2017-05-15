@@ -16,7 +16,7 @@ namespace WhoseShoutFormsPrism.ViewModels
 {
     public class SummaryPageViewModel : BaseViewModel
     {
-        public List<ShoutGroupDto> ShoutGroups { get; set; }
+        public ObservableCollection<ShoutGroupDto> ShoutGroups { get; set; }
 
         public List<ShoutDto> ShoutsForGroup { get; set; }
 
@@ -71,7 +71,8 @@ namespace WhoseShoutFormsPrism.ViewModels
             base.OnNavigatingTo(parameters);
 
             Message = parameters.GetValue<string>("message");
-            ShoutGroups = (List<ShoutGroupDto>)parameters["model"];
+            var groups = (List<ShoutGroupDto>)parameters["model"];
+            ShoutGroups = new ObservableCollection<ShoutGroupDto>(groups);
             LoadData();
             m_EventAggregator.GetEvent<GroupsLoadedEvent>().Publish();
         }

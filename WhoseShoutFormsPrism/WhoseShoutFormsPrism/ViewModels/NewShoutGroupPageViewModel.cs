@@ -4,6 +4,7 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using WhoseShoutFormsPrism.Models;
 using WhoseShoutFormsPrism.Services;
@@ -19,7 +20,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public DelegateCommand CreateGroupCommand { get; }
         public DelegateCommand AddUserToGroupCommand { get; }
 
-        public List<ShoutUserDto> UsersInGroup { get; set; } = new List<ShoutUserDto>();
+        public ObservableCollection<ShoutUserDto> UsersInGroup { get; set; } = new ObservableCollection<ShoutUserDto>();
         public ShoutGroupDto Group { get; set; }
         public String ShoutName { get; set; }
 
@@ -43,7 +44,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             Group = new ShoutGroupDto()
             {
                 Name = ShoutName,
-                Users = UsersInGroup
+                Users = UsersInGroup.ToList()
             };
 
             await CurrentApp.Current.MainViewModel.ServiceApi.CreateGroupCommand(Group);
