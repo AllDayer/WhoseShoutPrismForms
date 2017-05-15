@@ -35,7 +35,6 @@ namespace WhoseShoutFormsPrism.ViewModels
         public void OnAddUserToGroupCommand()
         {
             UsersInGroup.Add(new ShoutUserDto());
-            //m_EventAggregator.GetEvent<UserAddedToGroupEvent>().Publish();
             RaisePropertyChanged(nameof(UsersInGroup));
         }
 

@@ -8,22 +8,11 @@ namespace WhoseShoutFormsPrism.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        INavigationService _navigationService { get; }
+        INavigationService m_NavigationService { get; }
 
         public AuthenticationService(INavigationService navigationService)
         {
-            _navigationService = navigationService;
-        }
-
-        public bool Login(string username, string password)
-        {
-            if (password.Equals("a", StringComparison.OrdinalIgnoreCase))
-            {
-                Settings.Current.UserName = username;
-                return true;
-            }
-
-            return false;
+            m_NavigationService = navigationService;
         }
 
         public async Task<bool> SocialLogin(Account account)
@@ -31,7 +20,6 @@ namespace WhoseShoutFormsPrism.Services
             bool success = await GetFacebook(account);
             if (success)
             {
-
             }
             return success;
         }
@@ -45,7 +33,6 @@ namespace WhoseShoutFormsPrism.Services
                 var response = await request.GetResponseAsync();
                 var fbUser = Newtonsoft.Json.Linq.JObject.Parse(response.GetResponseText());
 
-                //var email = fbUser["email"].ToString().Replace("\"", "");
                 var name = fbUser["first_name"].ToString().Replace("\"", "");
                 var id = fbUser["id"].ToString().Replace("\"", "");
                 var email = fbUser["email"].ToString().Replace("\"", "");
@@ -103,15 +90,13 @@ namespace WhoseShoutFormsPrism.Services
                 authenticator.Completed -= OnAuthCompleted;
                 authenticator.Error -= OnAuthError;
             }
-
-            //Debug.WriteLine("Authentication error: " + e.Message);
         }
         #endregion
 
         public void Logout()
         {
             Settings.Current.UserName = string.Empty;
-            _navigationService.NavigateAsync("/Login");
+            m_NavigationService.NavigateAsync("/Login");
         }
     }
 }

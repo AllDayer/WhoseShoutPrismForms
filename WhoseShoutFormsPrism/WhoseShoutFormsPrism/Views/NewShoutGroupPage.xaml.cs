@@ -13,7 +13,7 @@ namespace WhoseShoutFormsPrism.Views
         {
             InitializeComponent();
             _ea = eventAggregator;
-            _ea.GetEvent<UserAddedToGroupEvent>().Subscribe(() => SetRepeater());
+            //_ea.GetEvent<UserAddedToGroupEvent>().Subscribe(() => SetRepeater());
         }
 
         protected override void OnBindingContextChanged()
@@ -24,7 +24,7 @@ namespace WhoseShoutFormsPrism.Views
         private void SetRepeater()
         {
             repeater.ParentVM = BindingContext;
-            repeater.ItemsSource = ((NewShoutGroupPageViewModel)BindingContext).UsersInGroup;
+            //repeater.ItemsSource = ((NewShoutGroupPageViewModel)BindingContext).UsersInGroup;
         }
 
         protected override void OnDisappearing()

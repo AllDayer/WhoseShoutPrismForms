@@ -14,118 +14,94 @@ namespace WhoseShoutFormsPrism.ViewModels
 {
     public class LoginPageViewModel : BaseViewModel
     {
-        IAuthenticationService _authenticationService { get; }
+        IAuthenticationService m_AuthenticationService { get; }
         IPageDialogService _pageDialogService { get; }
+        public DelegateCommand OAuthCommand { get; }
+
+        //private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
 
         public LoginPageViewModel(INavigationService navigationService, IAuthenticationService authenticationService, IPageDialogService pageDialogService)
             : base(navigationService)
         {
-            _authenticationService = authenticationService;
+            m_AuthenticationService = authenticationService;
             _pageDialogService = pageDialogService;
 
             Title = "Login";
 
-            LoginCommand = new DelegateCommand(OnLoginCommandExecuted, LoginCommandCanExecute)
-                .ObservesProperty(() => UserName)
-                .ObservesProperty(() => Password);
-
             OAuthCommand = new DelegateCommand(OnOAuthCommandExecuted);
-
-            UserName = "a";
-            Password = "a";
         }
 
-        private string _userName;
-        public string UserName
+        private bool m_IsLoggingIn;
+        public bool IsLoggingIn
         {
-            get { return _userName; }
-            set { SetProperty(ref _userName, value); }
-        }
-
-        private string _password;
-        public string Password
-        {
-            get { return _password; }
-            set { SetProperty(ref _password, value); }
-        }
-
-        public DelegateCommand LoginCommand { get; }
-        public DelegateCommand OAuthCommand { get; }
-
-        private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
-        private async void OnLoginCommandExecuted()
-        {
-            IsBusy = true;
-            if (_authenticationService.Login(UserName, Password))
-            {
-                NavigationParameters nav = new NavigationParameters();
-
-                var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(TristanUserString);
-                nav.Add("model", groups);
-
-                await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
-            }
-            else
-            {
-                await _pageDialogService.DisplayAlertAsync("Wrong", "Hi", "");
-            }
-            IsBusy = false;
+            get { return m_IsLoggingIn; }
+            set { SetProperty(ref m_IsLoggingIn, value); }
         }
 
         private async void OnOAuthCommandExecuted()
         {
+            bool potentialFirstTimeExecuted = true;
+            IsLoggingIn = true;
             Account account = null;
             IEnumerable<Account> accounts = AccountStore.Create().FindAccountsForService("Facebook");
             if (accounts != null)
             {
                 account = accounts.FirstOrDefault();
+                potentialFirstTimeExecuted = false;
             }
             if (account == null)
             {
-                _authenticationService.RegisterFacebook();
+                m_AuthenticationService.RegisterFacebook();
+
             }
-            else
+
+            bool success = await m_AuthenticationService.SocialLogin(account);
+            if (Settings.Current.UserGuid == null || Settings.Current.UserGuid == Guid.Empty)
             {
-                bool success = await _authenticationService.SocialLogin(account);
-                if (Settings.Current.UserGuid == null || Settings.Current.UserGuid == Guid.Empty)
+                ShoutUserDto userDto = new ShoutUserDto()
                 {
-                    ShoutUserDto userDto = new ShoutUserDto()
-                    {
-                        ShoutSocialID = Settings.Current.SocialUserID,
-                        AuthType = Settings.Current.UserAuth,
-                        UserName = Settings.Current.UserFirstName
+                    ShoutSocialID = Settings.Current.SocialUserID,
+                    AuthType = Settings.Current.UserAuth,
+                    UserName = Settings.Current.UserFirstName,
+                    Email = Settings.Current.UserEmail                    
+                };
 
-                    };
-                    var user = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(userDto);
+                if (potentialFirstTimeExecuted)
+                {
+                    //if user email is found, update that
+                    var newUser = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserByEmail(Settings.Current.UserEmail);
 
-                    if (user != null)
-                    {
-                        Settings.Current.UserGuid = user.ID;
-                    }
-                    else
-                    {
-                        userDto.ID = Guid.NewGuid();
-                        success = await CurrentApp.Current.MainViewModel.ServiceApi.NewShoutUser(userDto);
-                        if (success)
-                        {
-                            Settings.Current.UserGuid = userDto.ID;
-                        }
-                    }
                 }
 
-                if (success)
+                var user = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(userDto);
+
+                if (user != null)
                 {
-                    NavigationParameters nav = new NavigationParameters();
-
-                    var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
-                    nav.Add("model", groups);
-
-                    await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
+                    Settings.Current.UserGuid = user.ID;
+                }
+                else
+                {
+                    userDto.ID = Guid.NewGuid();
+                    success = await CurrentApp.Current.MainViewModel.ServiceApi.NewShoutUser(userDto);
+                    if (success)
+                    {
+                        Settings.Current.UserGuid = userDto.ID;
+                    }
                 }
             }
-        }
 
-        private bool LoginCommandCanExecute() =>
-            !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && IsNotBusy;
+            if (success)
+            {
+                NavigationParameters nav = new NavigationParameters();
+
+                var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
+                nav.Add("model", groups);
+
+                await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
+            }
+
+            IsLoggingIn = false;
+        }
+        
     }
 }

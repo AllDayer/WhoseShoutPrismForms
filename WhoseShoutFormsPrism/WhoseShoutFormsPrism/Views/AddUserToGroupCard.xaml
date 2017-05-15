@@ -8,9 +8,8 @@
         <StackLayout>
             <control:CardView>
                 <StackLayout Padding="10" Spacing="10">
-                    
-                    <Label Text="User" />
-
+                    <Label Text="Add a friends email and we'll send them an invite" />
+                    <Entry Placeholder="Email" Text="{Binding Email}"/>
                 </StackLayout>
             </control:CardView>
         </StackLayout>

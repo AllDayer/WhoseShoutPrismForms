@@ -74,6 +74,40 @@ namespace WhoseShoutFormsPrism.Services
             }
         }
 
+        public async Task<ShoutUserDto> GetShoutUserByEmail(string email)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await client.GetAsync("api/shoutusers?email=" + email);
+                    response.EnsureSuccessStatusCode();
+                    return await ReadAsAsync<ShoutUserDto>(response.Content);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<ShoutUserDto> PatchShoutUser(ShoutUserDto user)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await client.PatchAsync("api/shoutusers?email=" + email);
+                    response.EnsureSuccessStatusCode();
+                    return await ReadAsAsync<ShoutUserDto>(response.Content);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<bool> NewShoutUser(ShoutUserDto user)
         {
             try
