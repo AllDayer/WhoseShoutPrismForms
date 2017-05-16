@@ -133,8 +133,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             {
             }
         }
-
-
+        
         public async Task<List<ShoutDto>> LoadShoutsForGroup(String groupID)
         {
             var shouts = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutsForGroup(groupID);

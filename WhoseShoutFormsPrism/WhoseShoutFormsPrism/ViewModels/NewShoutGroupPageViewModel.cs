@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WhoseShoutFormsPrism.Helpers;
 using WhoseShoutFormsPrism.Models;
 using WhoseShoutFormsPrism.Services;
 using WhoseShoutWebService.Models;
@@ -42,11 +43,20 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
             Group = new ShoutGroupDto()
             {
+                ID = Guid.NewGuid(),
                 Name = ShoutName,
                 Users = UsersInGroup.ToList()
             };
 
+            Group.Users.Add(new ShoutUserDto() { ID = Settings.Current.UserGuid });
+
             await CurrentApp.Current.MainViewModel.ServiceApi.CreateGroupCommand(Group);
+
+            NavigationParameters nav = new NavigationParameters();
+
+            var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
+            nav.Add("model", groups);
+            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)
