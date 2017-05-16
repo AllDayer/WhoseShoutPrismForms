@@ -15,12 +15,13 @@ namespace WhoseShoutFormsPrism.ViewModels
         INavigationService m_NavigationService;
         private ShoutDto m_Shout = new ShoutDto();
 
-        public ObservableCollection<ShoutUserDto> UsersForShout = new ObservableCollection<ShoutUserDto>();
+        public ObservableCollection<ShoutUserDto> UsersForShout { get; set; }
 
         public BuyPageViewModel(INavigationService navigationService) : base(navigationService)
         {
             m_NavigationService = navigationService;
             BuyCommand = new DelegateCommand(OnBuyCommandExecuted);
+            UsersForShout = new ObservableCollection<ShoutUserDto>();
         }
 
         public DelegateCommand BuyCommand { get; }
@@ -115,6 +116,11 @@ namespace WhoseShoutFormsPrism.ViewModels
         
         public override void OnNavigatedTo(NavigationParameters parameters)
         {
+
+        }
+
+        public override void OnNavigatingTo(NavigationParameters parameters)
+        {
             m_Shout = (ShoutDto)parameters["model"];
             RaisePropertyChanged(nameof(GroupID));
             RaisePropertyChanged(nameof(ID));
@@ -124,11 +130,6 @@ namespace WhoseShoutFormsPrism.ViewModels
                 UsersForShout.Add(u);
             }
             RaisePropertyChanged("UserName");
-        }
-
-        public override void OnNavigatingTo(NavigationParameters parameters)
-        {
-
         }
     }
 }

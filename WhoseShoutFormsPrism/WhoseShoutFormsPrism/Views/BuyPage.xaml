@@ -13,8 +13,7 @@
         <Label Text="{Binding GroupID}"/>
         <Entry Placeholder="Cost" Text="{Binding Cost}"/>
 
-        <Entry Text="{Binding UserName}"/>
-        <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
+        <Picker ItemsSource="{Binding UsersForShout}" ItemDisplayBinding="{Binding UserName}" SelectedIndex="{Binding SelectedIndex}"/>
         <Button Text="Buy" Command="{Binding BuyCommand}"/>
 
         <Label Text="{Binding ShoutDto}"/>
