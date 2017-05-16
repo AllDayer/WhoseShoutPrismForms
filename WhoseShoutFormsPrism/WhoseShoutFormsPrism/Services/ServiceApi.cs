@@ -67,13 +67,13 @@ namespace WhoseShoutFormsPrism.Services
             return client;
         }
 
-        public async Task<ShoutUserDto> GetShoutUserBySocial(ShoutUserDto user)
+        public async Task<ShoutUserDto> GetShoutUserBySocial(string socialID, AuthType authType = AuthType.Facebook)
         {
             try
             {
                 using (var client = NewHttpClient())
                 {
-                    var response = await client.GetAsync("api/shoutusers?socialId=" + user.ShoutSocialID + "&authType=" + user.AuthType);
+                    var response = await client.GetAsync("api/shoutusers?socialId=" + socialID + "&authType=" + authType);
                     response.EnsureSuccessStatusCode();
                     return await ReadAsAsync<ShoutUserDto>(response.Content);
                 }
@@ -95,13 +95,13 @@ namespace WhoseShoutFormsPrism.Services
                     return await ReadAsAsync<ShoutUserDto>(response.Content);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }
         }
 
-        public async Task<ShoutUserDto> PatchShoutUser(ShoutUserDto shoutUser)
+        public async Task<ShoutUserDto> PatchShoutUser(ShoutUser shoutUser)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace WhoseShoutFormsPrism.Services
             }
         }
 
-        public async Task<bool> NewShoutUser(ShoutUserDto user)
+        public async Task<bool> NewShoutUser(ShoutUser user)
         {
             try
             {
@@ -146,7 +146,7 @@ namespace WhoseShoutFormsPrism.Services
                     response.EnsureSuccessStatusCode();
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return;
             }
@@ -163,7 +163,7 @@ namespace WhoseShoutFormsPrism.Services
                     return await ReadAsAsync<List<ShoutGroupDto>>(response.Content);
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return null;
             }
@@ -185,7 +185,7 @@ namespace WhoseShoutFormsPrism.Services
                 return null;
             }
         }
-        
+
 
         public async Task NewShout(ShoutDto shout)
         {
@@ -197,7 +197,7 @@ namespace WhoseShoutFormsPrism.Services
                     response.EnsureSuccessStatusCode();
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return;
             }

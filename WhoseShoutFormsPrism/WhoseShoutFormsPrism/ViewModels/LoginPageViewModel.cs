@@ -51,43 +51,14 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
             if (account == null)
             {
+                //Get auth token from Facebook
                 m_AuthenticationService.RegisterFacebook();
             }
 
+
             bool success = await m_AuthenticationService.SocialLogin(account);
-            if (Settings.Current.UserGuid == null || Settings.Current.UserGuid == Guid.Empty)
-            {
-                ShoutUserDto userDto = new ShoutUserDto()
-                {
-                    ShoutSocialID = Settings.Current.SocialUserID,
-                    AuthType = Settings.Current.UserAuth,
-                    UserName = Settings.Current.UserFirstName,
-                    Email = Settings.Current.UserEmail                    
-                };
 
-                if (potentialFirstTimeExecuted)
-                {
-                    //if user email is found, update that
-                    var newUser = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserByEmail(Settings.Current.UserEmail);
-                    await CurrentApp.Current.MainViewModel.ServiceApi.PatchShoutUser(userDto);
-                }
 
-                var user = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(userDto);
-
-                if (user != null)
-                {
-                    Settings.Current.UserGuid = user.ID;
-                }
-                else
-                {
-                    userDto.ID = Guid.NewGuid();
-                    success = await CurrentApp.Current.MainViewModel.ServiceApi.NewShoutUser(userDto);
-                    if (success)
-                    {
-                        Settings.Current.UserGuid = userDto.ID;
-                    }
-                }
-            }
 
             if (success)
             {

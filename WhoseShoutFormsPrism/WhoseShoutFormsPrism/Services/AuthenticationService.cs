@@ -3,6 +3,8 @@ using Prism.Navigation;
 using WhoseShoutFormsPrism.Helpers;
 using Xamarin.Auth;
 using System.Threading.Tasks;
+using WhoseShoutWebService.Models;
+using WhoseShoutFormsPrism.Models;
 
 namespace WhoseShoutFormsPrism.Services
 {
@@ -17,11 +19,7 @@ namespace WhoseShoutFormsPrism.Services
 
         public async Task<bool> SocialLogin(Account account)
         {
-            bool success = await GetFacebook(account);
-            if (success)
-            {
-            }
-            return success;
+            return await GetFacebook(account);
         }
 
         #region Facebook
@@ -37,16 +35,97 @@ namespace WhoseShoutFormsPrism.Services
                 var id = fbUser["id"].ToString().Replace("\"", "");
                 var email = fbUser["email"].ToString().Replace("\"", "");
 
-                Settings.Current.UserFirstName = name;
-                Settings.Current.SocialUserID = id;
-                Settings.Current.UserEmail = email;
-
+                ShoutUserDto userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
+                if (userDto == null ||
+                    name != userDto.UserName ||
+                    id != userDto.ShoutSocialID ||
+                    email != userDto.Email)
+                {
+                    Settings.Current.UserFirstName = name;
+                    Settings.Current.SocialUserID = id;
+                    Settings.Current.UserEmail = email;
+                    Settings.Current.UserAuth = Models.AuthType.Facebook;
+                    //This is what not we have saved on the server
+                    await GetOrCreate(false);
+                }
             }
             catch (Exception)
             {
                 return false;
             }
             return true;
+        }
+
+        public async Task GetOrCreate(bool checkSocial = true)
+        {
+            bool patch = false;
+
+
+            ShoutUserDto userDto = null;
+            if (checkSocial)
+            {
+                await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
+            }
+
+            if (userDto == null)
+            {
+                userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserByEmail(Settings.Current.UserEmail);
+                if (userDto == null)
+                {
+                    // New user
+                    ShoutUser u = ShoutUserFromSettings(true);
+                    bool success = await CurrentApp.Current.MainViewModel.ServiceApi.NewShoutUser(u);
+                    if (success)
+                    {
+                        Settings.Current.UserGuid = u.ID;
+                    }
+                }
+                else
+                {
+                    // Likely created by someone else
+                    patch = true;
+                }
+            }
+            else
+            {
+                // Something to be updated
+                patch = true;
+            }
+
+            if (patch)
+            {
+                ShoutUser u = ShoutUserFromSettings(false);
+                //if user email is found, update that
+                await CurrentApp.Current.MainViewModel.ServiceApi.PatchShoutUser(u);
+            }
+        }
+
+        private ShoutUser ShoutUserFromSettings(bool newID)
+        {
+            ShoutUser u = new ShoutUser()
+            {
+                UserName = Settings.Current.UserFirstName,
+                Email = Settings.Current.UserEmail
+
+            };
+            if (newID)
+            {
+                u.ID = Guid.NewGuid();
+            }
+            else
+            {
+                u.ID = Settings.Current.UserGuid;
+            }
+
+            if (Settings.Current.UserAuth == Models.AuthType.Facebook)
+            {
+                u.FacebookID = Settings.Current.SocialUserID;
+            }
+            else if (Settings.Current.UserAuth == AuthType.Twitter)
+            {
+                u.TwitterID = Settings.Current.SocialUserID;
+            }
+            return u;
         }
 
         public void RegisterFacebook()
