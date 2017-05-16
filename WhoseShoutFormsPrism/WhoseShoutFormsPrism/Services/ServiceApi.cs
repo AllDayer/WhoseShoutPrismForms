@@ -4,7 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using WhoseShoutFormsPrism.Helpers;
 using WhoseShoutFormsPrism.Models;
 using WhoseShoutWebService.Models;
 
@@ -27,6 +29,14 @@ namespace WhoseShoutFormsPrism.Services
             StringContent content = new System.Net.Http.StringContent(contentString, Encoding.UTF8, "application/json");
 
             return await client.PostAsync(requestUri, content);
+        }
+
+        private async Task<HttpResponseMessage> PatchAsJsonAsync<T>(HttpClient client, string requestUri, T value)
+        {
+            string contentString = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            StringContent content = new System.Net.Http.StringContent(contentString, Encoding.UTF8, "application/json");
+
+            return await client.PatchAsync(requestUri, content);
         }
 
         private HttpClient NewHttpClient(System.Net.CookieContainer cookies = null)
@@ -91,13 +101,14 @@ namespace WhoseShoutFormsPrism.Services
             }
         }
 
-        public async Task<ShoutUserDto> PatchShoutUser(ShoutUserDto user)
+        public async Task<ShoutUserDto> PatchShoutUser(ShoutUserDto shoutUser)
         {
             try
             {
                 using (var client = NewHttpClient())
                 {
-                    var response = await client.PatchAsync("api/shoutusers?email=" + email);
+
+                    var response = await PatchAsJsonAsync(client, "api/shoutusers/" + shoutUser.ID, shoutUser);
                     response.EnsureSuccessStatusCode();
                     return await ReadAsAsync<ShoutUserDto>(response.Content);
                 }

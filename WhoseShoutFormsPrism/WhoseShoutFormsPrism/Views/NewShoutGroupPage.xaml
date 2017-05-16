@@ -8,17 +8,19 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
-    <StackLayout>
-        <Label Text="New group name" />
-        <Entry Placeholder="New group name" Text="{Binding ShoutName}"/>
+    <ScrollView>
+        <StackLayout>
+            <Label Text="New group name" />
+            <Entry Placeholder="New group name" Text="{Binding ShoutName}"/>
 
-        <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}" />
+            <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}" />
 
-        <Button Text="Add User" Command="{Binding AddUserToGroupCommand}"/>
+            <Button Text="Add User" Command="{Binding AddUserToGroupCommand}"/>
 
-        <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
-        <Button Text="Create" Command="{Binding CreateGroupCommand}"/>
+            <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
+            <Button Text="Create" Command="{Binding CreateGroupCommand}"/>
 
 
-    </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

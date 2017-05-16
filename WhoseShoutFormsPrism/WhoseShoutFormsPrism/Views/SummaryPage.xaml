@@ -8,12 +8,14 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
-    <StackLayout x:Name="Anchor" >
+    <ScrollView>
+        <StackLayout x:Name="Anchor" >
 
-        <Label Text="It looks like you're not in any groups. Add a group to start tracking!" IsVisible="{Binding NoGroups}" Margin="20"/>
+            <Label Text="It looks like you're not in any groups. Add a group to start tracking!" IsVisible="{Binding NoGroups}" Margin="20"/>
 
-        <control:GroupRepeaterView x:Name="repeater" />
+            <control:GroupRepeaterView x:Name="repeater" />
 
-        <Button Text="New Group" Command="{Binding NewShoutCommand}" VerticalOptions="StartAndExpand"/>
-    </StackLayout>
+            <Button Text="New Group" Command="{Binding NewShoutCommand}" VerticalOptions="StartAndExpand"/>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

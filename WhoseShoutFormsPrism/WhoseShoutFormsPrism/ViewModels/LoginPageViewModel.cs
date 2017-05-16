@@ -52,7 +52,6 @@ namespace WhoseShoutFormsPrism.ViewModels
             if (account == null)
             {
                 m_AuthenticationService.RegisterFacebook();
-
             }
 
             bool success = await m_AuthenticationService.SocialLogin(account);
@@ -70,7 +69,7 @@ namespace WhoseShoutFormsPrism.ViewModels
                 {
                     //if user email is found, update that
                     var newUser = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserByEmail(Settings.Current.UserEmail);
-
+                    await CurrentApp.Current.MainViewModel.ServiceApi.PatchShoutUser(userDto);
                 }
 
                 var user = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(userDto);

@@ -38,6 +38,7 @@
     <Compile Include="Controls\CardView.cs" />
     <Compile Include="Controls\RepeaterView.cs" />
     <Compile Include="CurrentApp.cs" />
+    <Compile Include="Helpers\HttpClientExtension.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Models\Dto\ShoutDto.cs" />
     <Compile Include="Models\Dto\ShoutGroupDto.cs" />
