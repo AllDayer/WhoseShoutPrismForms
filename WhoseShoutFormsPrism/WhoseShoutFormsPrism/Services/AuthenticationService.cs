@@ -5,6 +5,7 @@ using Xamarin.Auth;
 using System.Threading.Tasks;
 using WhoseShoutWebService.Models;
 using WhoseShoutFormsPrism.Models;
+using WhoseShoutFormsPrism.ViewModels;
 
 namespace WhoseShoutFormsPrism.Services
 {
@@ -32,18 +33,25 @@ namespace WhoseShoutFormsPrism.Services
                 var fbUser = Newtonsoft.Json.Linq.JObject.Parse(response.GetResponseText());
 
                 var name = fbUser["first_name"].ToString().Replace("\"", "");
-                var id = fbUser["id"].ToString().Replace("\"", "");
+                var socialID = fbUser["id"].ToString().Replace("\"", "");
                 var email = fbUser["email"].ToString().Replace("\"", "");
 
-                ShoutUserDto userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
+                ShoutUserDto userDto = null;
+                if (!String.IsNullOrEmpty(Settings.Current.SocialUserID))
+                {
+                    userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
+                }
+
+                Settings.Current.UserGuid = userDto.ID;
+
+
                 if (userDto == null ||
                     name != userDto.UserName ||
-                    id != userDto.ShoutSocialID ||
+                    socialID != userDto.ShoutSocialID ||
                     email != userDto.Email)
                 {
-                    Settings.Current.UserGuid = userDto.ID;
                     Settings.Current.UserFirstName = name;
-                    Settings.Current.SocialUserID = id;
+                    Settings.Current.SocialUserID = socialID;
                     Settings.Current.UserEmail = email;
                     Settings.Current.UserAuth = Models.AuthType.Facebook;
                     //This is what not we have saved on the server
@@ -61,16 +69,19 @@ namespace WhoseShoutFormsPrism.Services
         {
             bool patch = false;
 
-
             ShoutUserDto userDto = null;
-            if (checkSocial)
+            if (checkSocial && !String.IsNullOrEmpty(Settings.Current.SocialUserID))
             {
                 userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
             }
 
             if (userDto == null)
             {
-                userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserByEmail(Settings.Current.UserEmail);
+                if (!String.IsNullOrEmpty(Settings.Current.UserEmail))
+                {
+                    userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserByEmail(Settings.Current.UserEmail);
+                }
+
                 if (userDto == null)
                 {
                     // New user
@@ -129,7 +140,7 @@ namespace WhoseShoutFormsPrism.Services
             return u;
         }
 
-        public void RegisterFacebook()
+        public void RegisterFacebook(LoginPageViewModel loginViewModel)
         {
             var authenticator = new OAuth2Authenticator(
                                             clientId: "842344439275386",
@@ -137,40 +148,14 @@ namespace WhoseShoutFormsPrism.Services
                                             authorizeUrl: new Uri("https://m.facebook.com/dialog/oauth/"),
                                             redirectUrl: new Uri("http://www.facebook.com/connect/login_success.html"));
 
-            authenticator.Completed += OnAuthCompleted;
-            authenticator.Error += OnAuthError;
+            authenticator.Completed += loginViewModel.OnAuthCompleted;
+            authenticator.Error += loginViewModel.OnAuthError;
 
             var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
             presenter.Login(authenticator);
         }
 
-        void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
-        {
-            var authenticator = sender as OAuth2Authenticator;
 
-            if (authenticator != null)
-            {
-                authenticator.Completed -= OnAuthCompleted;
-                authenticator.Error -= OnAuthError;
-            }
-
-            if (e.IsAuthenticated)
-            {
-                var accessToken = e.Account.Properties["access_token"].ToString();
-                AccountStore.Create().Save(e.Account, "Facebook");
-            }
-        }
-
-        void OnAuthError(object sender, AuthenticatorErrorEventArgs e)
-        {
-            var authenticator = sender as OAuth2Authenticator;
-
-            if (authenticator != null)
-            {
-                authenticator.Completed -= OnAuthCompleted;
-                authenticator.Error -= OnAuthError;
-            }
-        }
         #endregion
 
         public void Logout()

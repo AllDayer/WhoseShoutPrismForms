@@ -13,7 +13,7 @@
 
             <Label Text="It looks like you're not in any groups. Add a group to start tracking!" IsVisible="{Binding NoGroups}" Margin="20"/>
 
-            <control:GroupRepeaterView x:Name="repeater" />
+            <control:GroupRepeaterView x:Name="repeater" ItemsSource="{Binding ShoutGroups}" ParentVM="{Binding .}" />
 
             <Button Text="New Group" Command="{Binding NewShoutCommand}" VerticalOptions="StartAndExpand"/>
         </StackLayout>

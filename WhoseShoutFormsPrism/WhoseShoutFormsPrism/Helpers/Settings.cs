@@ -2,9 +2,11 @@
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WhoseShoutFormsPrism.Models;
+using WhoseShoutWebService.Models;
 
 namespace WhoseShoutFormsPrism.Helpers
 {
@@ -90,5 +92,7 @@ namespace WhoseShoutFormsPrism.Helpers
             get { return GetProperty<string>(); }
             set { SetProperty(value); }
         }
+
+        public ObservableCollection<ShoutGroupDto> ShoutGroups { get; set; }
     }
 }

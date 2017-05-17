@@ -13,7 +13,7 @@ namespace WhoseShoutFormsPrism.Views
     public partial class ShoutSummaryGroupCard : ContentView
     {
         public SummaryPageViewModel SummaryVM { get; set; }
-
+        
         public ShoutSummaryGroupCard()
         {
             InitializeComponent();

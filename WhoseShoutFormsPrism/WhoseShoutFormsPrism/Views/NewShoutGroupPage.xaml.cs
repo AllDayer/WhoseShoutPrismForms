@@ -18,6 +18,7 @@ namespace WhoseShoutFormsPrism.Views
 
         protected override void OnBindingContextChanged()
         {
+            repeater.ParentVM = BindingContext;
             base.OnBindingContextChanged();
         }
 

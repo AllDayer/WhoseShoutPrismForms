@@ -40,38 +40,70 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         private async void OnOAuthCommandExecuted()
         {
-            bool potentialFirstTimeExecuted = true;
             IsLoggingIn = true;
-            Account account = null;
-            IEnumerable<Account> accounts = AccountStore.Create().FindAccountsForService("Facebook");
-            if (accounts != null)
-            {
-                account = accounts.FirstOrDefault();
-                potentialFirstTimeExecuted = false;
-            }
+            Account account = GetFacebookAccount();
             if (account == null)
             {
                 //Get auth token from Facebook
-                m_AuthenticationService.RegisterFacebook();
+                m_AuthenticationService.RegisterFacebook(this);
+                return;
             }
 
-
-            bool success = await m_AuthenticationService.SocialLogin(account);
-
-
-
-            if (success)
-            {
-                NavigationParameters nav = new NavigationParameters();
-
-                var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
-                nav.Add("model", groups);
-
-                await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
-            }
+            await AuthenticationSuccess();
 
             IsLoggingIn = false;
         }
-        
+
+        private Account GetFacebookAccount()
+        {
+            IEnumerable<Account> accounts = AccountStore.Create().FindAccountsForService("Facebook");
+            if (accounts != null)
+            {
+                return accounts.FirstOrDefault();
+            }
+            return null;
+        }
+
+        private async Task AuthenticationSuccess()
+        {
+            Account account = GetFacebookAccount();
+            bool success = await m_AuthenticationService.SocialLogin(account);
+            
+            NavigationParameters nav = new NavigationParameters();
+            var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
+            Settings.Current.ShoutGroups = new System.Collections.ObjectModel.ObservableCollection<ShoutGroupDto>(groups);
+
+            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
+        }
+
+        public async void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
+        {
+            var authenticator = sender as OAuth2Authenticator;
+
+            if (authenticator != null)
+            {
+                authenticator.Completed -= OnAuthCompleted;
+                authenticator.Error -= OnAuthError;
+            }
+
+            if (e.IsAuthenticated)
+            {
+                var accessToken = e.Account.Properties["access_token"].ToString();
+                AccountStore.Create().Save(e.Account, "Facebook");
+                await AuthenticationSuccess();
+            }
+        }
+
+        public void OnAuthError(object sender, AuthenticatorErrorEventArgs e)
+        {
+            var authenticator = sender as OAuth2Authenticator;
+
+            if (authenticator != null)
+            {
+                authenticator.Completed -= OnAuthCompleted;
+                authenticator.Error -= OnAuthError;
+            }
+        }
+
     }
 }

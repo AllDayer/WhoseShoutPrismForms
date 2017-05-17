@@ -94,7 +94,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
-        int m_SelectedIndex;
+        int m_SelectedIndex = -1;
         public int SelectedIndex
         {
             get
@@ -103,7 +103,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
             set
             {
-                if (m_SelectedIndex != value)
+                if (m_SelectedIndex != value && value >= 0)
                 {
                     m_SelectedIndex = value;
                     RaisePropertyChanged(nameof(SelectedIndex));
@@ -122,13 +122,8 @@ namespace WhoseShoutFormsPrism.ViewModels
             //Save sync item
             //Sync with server
             await CurrentApp.Current.MainViewModel.ServiceApi.NewShout(m_Shout);
-
-            //Return
-            NavigationParameters nav = new NavigationParameters
-            {
-                { "model", ShoutGroups }
-            };
-            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
+            
+            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
             //await m_NavigationService.GoBackAsync();
         }
 
@@ -154,11 +149,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             {
                 UsersForShout.Add(u);
             }
-            ShoutGroups = new List<ShoutGroupDto>();
-            foreach (var g in ((List<ShoutGroupDto>)parameters["groups"]))
-            {
-                ShoutGroups.Add(g);
-            }
+
             RaisePropertyChanged("UserName");
         }
     }

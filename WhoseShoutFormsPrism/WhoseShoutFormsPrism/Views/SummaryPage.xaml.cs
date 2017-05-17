@@ -13,23 +13,24 @@ namespace WhoseShoutFormsPrism.Views
         {
             InitializeComponent();
             _ea = eventAggregator;
-            _ea.GetEvent<GroupsLoadedEvent>().Subscribe(() => SetRepeater());
+            //_ea.GetEvent<GroupsLoadedEvent>().Subscribe(() => SetRepeater());
         }
 
         protected override void OnBindingContextChanged()
         {
+            repeater.ParentVM = BindingContext;
             base.OnBindingContextChanged();
         }
         
         private void SetRepeater()
         {
-            repeater.ParentVM = BindingContext;
-            repeater.ItemsSource = ((SummaryPageViewModel)this.BindingContext).ShoutGroups;
+            //
+            //repeater.ItemsSource = ((SummaryPageViewModel)this.BindingContext).ShoutGroups;
         }
 
         protected override void OnDisappearing()
         {
-            _ea.GetEvent<GroupsLoadedEvent>().Unsubscribe(null);
+            //_ea.GetEvent<GroupsLoadedEvent>().Unsubscribe(null);
 
             base.OnDisappearing();
         }
