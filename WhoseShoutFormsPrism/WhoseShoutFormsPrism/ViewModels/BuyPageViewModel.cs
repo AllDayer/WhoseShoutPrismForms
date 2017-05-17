@@ -94,6 +94,24 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
+        int m_SelectedIndex;
+        public int SelectedIndex
+        {
+            get
+            {
+                return m_SelectedIndex;
+            }
+            set
+            {
+                if (m_SelectedIndex != value)
+                {
+                    m_SelectedIndex = value;
+                    RaisePropertyChanged(nameof(SelectedIndex));
+                    UserDto = UsersForShout[m_SelectedIndex];
+                }
+            }
+        }
+
         public async void OnBuyCommandExecuted()
         {
             m_Shout.PurchaseTimeUtc = DateTime.UtcNow;
@@ -106,7 +124,12 @@ namespace WhoseShoutFormsPrism.ViewModels
             await CurrentApp.Current.MainViewModel.ServiceApi.NewShout(m_Shout);
 
             //Return
-            await m_NavigationService.GoBackAsync();
+            NavigationParameters nav = new NavigationParameters
+            {
+                { "model", ShoutGroups }
+            };
+            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
+            //await m_NavigationService.GoBackAsync();
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)
@@ -119,6 +142,8 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         }
 
+        public List<ShoutGroupDto> ShoutGroups { get; set; }
+
         public override void OnNavigatingTo(NavigationParameters parameters)
         {
             m_Shout = (ShoutDto)parameters["model"];
@@ -128,6 +153,11 @@ namespace WhoseShoutFormsPrism.ViewModels
             foreach (var u in ((List<ShoutUserDto>)parameters["users"]))
             {
                 UsersForShout.Add(u);
+            }
+            ShoutGroups = new List<ShoutGroupDto>();
+            foreach (var g in ((List<ShoutGroupDto>)parameters["groups"]))
+            {
+                ShoutGroups.Add(g);
             }
             RaisePropertyChanged("UserName");
         }

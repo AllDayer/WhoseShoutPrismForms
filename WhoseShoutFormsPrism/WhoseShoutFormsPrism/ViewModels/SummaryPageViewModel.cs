@@ -156,6 +156,8 @@ namespace WhoseShoutFormsPrism.ViewModels
             NavigationParameters nav = new NavigationParameters();
             nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID });
             nav.Add("users", ShoutGroupDto.Users);
+            nav.Add("groups", ShoutGroups);
+
             await _navigationService.NavigateAsync("MainPage/BuyPage", nav);
         }
     }

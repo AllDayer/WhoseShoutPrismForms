@@ -7,17 +7,11 @@
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <Label Text="ShoutID" />
-        <Label Text="{Binding ID}"/>
-        <Label Text="ShoutGroupID" />
-        <Label Text="{Binding GroupID}"/>
+        <Label Text="How much is this going to cost?"/>
         <Entry Placeholder="Cost" Text="{Binding Cost}"/>
-
+        <Label Text="Who is buying?" />
         <Picker ItemsSource="{Binding UsersForShout}" ItemDisplayBinding="{Binding UserName}" SelectedIndex="{Binding SelectedIndex}"/>
         <Button Text="Buy" Command="{Binding BuyCommand}"/>
-
-        <Label Text="{Binding ShoutDto}"/>
-
     </StackLayout>
 
 </ContentPage>

@@ -41,6 +41,7 @@ namespace WhoseShoutFormsPrism.Services
                     id != userDto.ShoutSocialID ||
                     email != userDto.Email)
                 {
+                    Settings.Current.UserGuid = userDto.ID;
                     Settings.Current.UserFirstName = name;
                     Settings.Current.SocialUserID = id;
                     Settings.Current.UserEmail = email;
@@ -64,7 +65,7 @@ namespace WhoseShoutFormsPrism.Services
             ShoutUserDto userDto = null;
             if (checkSocial)
             {
-                await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
+                userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
             }
 
             if (userDto == null)
