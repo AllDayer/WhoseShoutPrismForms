@@ -52,7 +52,7 @@ namespace WhoseShoutFormsPrism.Controls
 
         public RepeaterView()
         {
-            Spacing = 0;
+            Spacing = 10;
         }
 
         public ObservableCollection<T> ItemsSource

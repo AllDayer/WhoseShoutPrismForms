@@ -3,19 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
+             xmlns:circle="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              x:Class="WhoseShoutFormsPrism.Views.ShoutSummaryGroupCard">
     <ContentView.Content>
-        <StackLayout>
+        <StackLayout BackgroundColor="#f5f5f5">
             <control:CardView>
-                <StackLayout Padding="10" Spacing="10">
-                    <Label Text="Shout Group Name" />
-                    <Label Text="{Binding Name}" />
+                <StackLayout Spacing="10">
+                    <Label Text="{Binding Name}" FontSize="Large"/>
 
                     <Label Text="{Binding ShoutName}"/>
 
                     <Label Text="Whose shout?"/>
                     <Label Text="{Binding WhoseShoutDisplay}"/>
-                    <Button x:Name="BuyRound" Text="Buy Round" />
+
+                    <circle:CircleImage x:Name="circle" Source="ic_plus_white_18dp.png" Aspect="AspectFit" FillColor="#FF5722" HeightRequest="50" WidthRequest="50" HorizontalOptions="End"/>
                 </StackLayout>
             </control:CardView>
         </StackLayout>

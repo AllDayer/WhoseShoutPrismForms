@@ -21,13 +21,18 @@ namespace WhoseShoutFormsPrism.Views
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            BuyRound.Clicked += BuyRound_Clicked;
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += (s, e) =>
+            {
+                var args = new BuyRoundArgs() { Group = (ShoutGroupDto)this.BindingContext };
+                SummaryVM.OnBuyCommandExecuted(args);
+            };
+            circle.GestureRecognizers.Add(tap);
+            //BuyRound.Clicked += BuyRound_Clicked;
         }
 
         private void BuyRound_Clicked(object sender, EventArgs e)
         {
-            var args = new BuyRoundArgs() { Group = (ShoutGroupDto)this.BindingContext };
-            SummaryVM.OnBuyCommandExecuted(args);
         }
     }
 }

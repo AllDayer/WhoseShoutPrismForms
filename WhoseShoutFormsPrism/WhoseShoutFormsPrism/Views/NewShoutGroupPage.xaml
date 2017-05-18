@@ -15,7 +15,7 @@
 
             <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}" />
 
-            <Button Text="Add User" Command="{Binding AddUserToGroupCommand}"/>
+            <Button Image="ic_person_add_black_48dp.png" BackgroundColor="Transparent" BorderColor="Transparent" Command="{Binding AddUserToGroupCommand}"/>
 
             <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
             <Button Text="Create" Command="{Binding CreateGroupCommand}"/>

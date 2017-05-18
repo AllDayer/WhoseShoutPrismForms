@@ -8,14 +8,14 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
-    <ScrollView>
+    <ScrollView BackgroundColor="#cccccc" Padding="10">
         <StackLayout x:Name="Anchor" >
 
             <Label Text="It looks like you're not in any groups. Add a group to start tracking!" IsVisible="{Binding NoGroups}" Margin="20"/>
 
             <control:GroupRepeaterView x:Name="repeater" ItemsSource="{Binding ShoutGroups}" ParentVM="{Binding .}" />
 
-            <Button Text="New Group" Command="{Binding NewShoutCommand}" VerticalOptions="StartAndExpand"/>
+            <Button x:Name="btn" Command="{Binding NewShoutCommand}"  Image="ic_group_add_black_48dp.png" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

@@ -8,13 +8,13 @@ namespace WhoseShoutFormsPrism.Controls
     {
         public CardView()
         {
-            Padding = 10;
-            Margin = 10;
             //if (Device.OS == TargetPlatform.iOS)
             {
                 HasShadow = true;
                 OutlineColor = Color.Transparent;
                 BackgroundColor = Color.Transparent;
+                CornerRadius = 5;
+
             }
         }
     }
