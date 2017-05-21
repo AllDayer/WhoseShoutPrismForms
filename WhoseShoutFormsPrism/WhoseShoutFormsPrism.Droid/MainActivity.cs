@@ -22,6 +22,7 @@ namespace WhoseShoutFormsPrism.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            Refractored.XamForms.PullToRefresh.Droid.PullToRefreshLayoutRenderer.Init();
             ImageCircle.Forms.Plugin.Droid.ImageCircleRenderer.Init();
             Xamarin.Auth.Presenters.OAuthLoginPresenter.PlatformLogin = (authenticator) =>
             {

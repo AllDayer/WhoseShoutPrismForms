@@ -20,6 +20,7 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         public DelegateCommand CreateGroupCommand { get; }
         public DelegateCommand AddUserToGroupCommand { get; }
+        public DelegateCommand CancelCommand { get; }
 
         public ObservableCollection<ShoutUserDto> UsersInGroup { get; set; } = new ObservableCollection<ShoutUserDto>();
         public ShoutGroupDto Group { get; set; }
@@ -31,6 +32,8 @@ namespace WhoseShoutFormsPrism.ViewModels
             m_EventAggregator = eventAggregator;
             CreateGroupCommand = new DelegateCommand(OnCreateGroupCommand);
             AddUserToGroupCommand = new DelegateCommand(OnAddUserToGroupCommand);
+            CancelCommand = new DelegateCommand(OnCancelCommand);
+            UsersInGroup.Add(new ShoutUserDto());
         }
 
         public void OnAddUserToGroupCommand()
@@ -57,6 +60,11 @@ namespace WhoseShoutFormsPrism.ViewModels
             var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
             nav.Add("model", groups);
             await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
+        }
+
+        public async void OnCancelCommand()
+        {
+            //Show Dialog
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)

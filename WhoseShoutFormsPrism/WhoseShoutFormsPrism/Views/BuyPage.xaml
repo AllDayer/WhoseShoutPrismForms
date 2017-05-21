@@ -6,12 +6,20 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
-    <StackLayout>
-        <Label Text="How much is this going to cost?"/>
-        <Entry Placeholder="Cost" Text="{Binding Cost}"/>
-        <Label Text="Who is buying?" />
-        <Picker ItemsSource="{Binding UsersForShout}" ItemDisplayBinding="{Binding UserName}" SelectedIndex="{Binding SelectedIndex}"/>
-        <Button Text="Buy" Command="{Binding BuyCommand}"/>
+    <StackLayout Margin="20" Spacing="15">
+        <Label Text="Something happened?" HorizontalOptions="Center" FontSize="Large" />
+        <StackLayout>
+            <Label Text="Who did it?" />
+            <Picker ItemsSource="{Binding UsersForShout}" ItemDisplayBinding="{Binding UserName}" SelectedIndex="{Binding SelectedIndex}"/>
+        </StackLayout>
+        <StackLayout>
+            <Label Text="Cost"/>
+            <Entry Placeholder="Cost" Text="{Binding Cost}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+            <Button Text="Cancel" BackgroundColor="#03A9F4" />
+            <Button Text="Record it!" Command="{Binding BuyCommand}" BackgroundColor="#03A9F4"/>
+        </StackLayout>
     </StackLayout>
 
 </ContentPage>

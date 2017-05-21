@@ -13,6 +13,7 @@ namespace WhoseShoutFormsPrism.Views
     public partial class AddUserToGroupCard : ContentView
     {
         public NewShoutGroupPageViewModel ShoutGroupVM { get; set; }
+        public String BGColor { get; set; }
 
         public AddUserToGroupCard()
         {

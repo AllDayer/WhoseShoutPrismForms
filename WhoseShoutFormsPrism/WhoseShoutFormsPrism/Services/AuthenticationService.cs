@@ -28,13 +28,21 @@ namespace WhoseShoutFormsPrism.Services
         {
             try
             {
-                var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=email,first_name,last_name,gender,picture"), null, account);
+                var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=email,first_name,last_name,gender,picture.type(large)"), null, account);
                 var response = await request.GetResponseAsync();
                 var fbUser = Newtonsoft.Json.Linq.JObject.Parse(response.GetResponseText());
 
                 var name = fbUser["first_name"].ToString().Replace("\"", "");
                 var socialID = fbUser["id"].ToString().Replace("\"", "");
                 var email = fbUser["email"].ToString().Replace("\"", "");
+
+                try
+                {
+                    Settings.Current.AvatarUrl = fbUser["picture"]["data"]["url"].ToString();
+                    Settings.Current.Avatar = await CurrentApp.Current.MainViewModel.ServiceApi.GetAvatar(Settings.Current.AvatarUrl);
+                }
+                catch (Exception)
+                { }
 
                 ShoutUserDto userDto = null;
                 if (!String.IsNullOrEmpty(Settings.Current.SocialUserID))

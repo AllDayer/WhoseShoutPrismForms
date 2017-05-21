@@ -29,6 +29,10 @@ namespace WhoseShoutFormsPrism.ViewModels
             Title = "Login";
 
             OAuthCommand = new DelegateCommand(OnOAuthCommandExecuted);
+            if (!String.IsNullOrEmpty(Settings.Current.SocialUserID))
+            {
+                OnOAuthCommandExecuted();
+            }
         }
 
         private bool m_IsLoggingIn;

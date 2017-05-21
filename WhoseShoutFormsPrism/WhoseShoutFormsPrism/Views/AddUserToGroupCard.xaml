@@ -8,8 +8,24 @@
         <StackLayout>
             <control:CardView>
                 <StackLayout Padding="10" Spacing="10">
-                    <Label Text="Add a friends email and we'll send them an invite" />
-                    <Entry Placeholder="Email" Text="{Binding Email}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Image Source="ic_label_outline_white_18dp" HorizontalOptions="End" Grid.Column="0" Grid.Row="0" />
+                        <Image Source="ic_email_outline_white_18dp" HorizontalOptions="End" Grid.Column="0" Grid.Row="1" />
+
+                        <!--<Label Text="Add a friends email and we'll send them an invite" />-->
+                        <Entry Placeholder="Name" Text="{Binding UserName}" Grid.Column="1" Grid.Row="0"/>
+                        <Entry Placeholder="Email" Text="{Binding Email}" Grid.Column="1" Grid.Row="1"/>
+                    </Grid>
                 </StackLayout>
             </control:CardView>
         </StackLayout>

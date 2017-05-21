@@ -146,7 +146,7 @@ namespace WhoseShoutFormsPrism.Services
                     response.EnsureSuccessStatusCode();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return;
             }
@@ -200,6 +200,21 @@ namespace WhoseShoutFormsPrism.Services
             catch (Exception)
             {
                 return;
+            }
+        }
+
+        public async Task<Byte[]> GetAvatar(string Url)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    return await client.GetByteArrayAsync(Url);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

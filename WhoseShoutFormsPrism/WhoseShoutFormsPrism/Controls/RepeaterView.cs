@@ -18,11 +18,11 @@ namespace WhoseShoutFormsPrism.Controls
         public UserRepeaterView()
         {
             this.HorizontalOptions = LayoutOptions.FillAndExpand;
-            this.VerticalOptions = LayoutOptions.StartAndExpand;
+            this.VerticalOptions = LayoutOptions.Start;
             m_ViewModels = new List<BaseViewModel>();
         }
 
-        protected override View ViewFor(object vm, object parentVM)
+        protected override View ViewFor(object vm, object parentVM, string bgColour)
         {
             return new AddUserToGroupCard() { ShoutGroupVM = (NewShoutGroupPageViewModel)parentVM, BindingContext = vm };
         }
@@ -39,9 +39,9 @@ namespace WhoseShoutFormsPrism.Controls
             m_ViewModels = new List<BaseViewModel>();
         }
 
-        protected override View ViewFor(object vm, object parentVM)
+        protected override View ViewFor(object vm, object parentVM, string bgColour)
         {
-            return new ShoutSummaryGroupCard() { SummaryVM = (SummaryPageViewModel)parentVM, BindingContext = vm };
+            return new ShoutSummaryGroupCard() { SummaryVM = (SummaryPageViewModel)parentVM, BGColour = bgColour, BindingContext = vm };
         }
     }
 
@@ -67,7 +67,7 @@ namespace WhoseShoutFormsPrism.Controls
             set { SetValue(ParentVMProperty, value); }
         }
 
-        protected virtual View ViewFor(object vm, object parent)
+        protected virtual View ViewFor(object vm, object parent, string bgColour)
         {
             return null;
         }
@@ -84,15 +84,16 @@ namespace WhoseShoutFormsPrism.Controls
             if (e.NewItems != null)
             {
                 var control = this as RepeaterView<T>;
-
+                int i = 0;
                 foreach (T item in e.NewItems)
                 {
 
-                    var view = control.ViewFor(item, control.ParentVM);
+                    var view = control.ViewFor(item, control.ParentVM, GetColour(i));
                     if (view != null)
                     {
                         control.Children.Add(view);
                     }
+                    i++;
                 }
 
                 this.UpdateChildrenLayout();
@@ -107,8 +108,9 @@ namespace WhoseShoutFormsPrism.Controls
         {
 
             var control = bindable as RepeaterView<T>;
+            control.Children.Clear();
             control.ItemsSource.CollectionChanged += control.ItemsSource_CollectionChanged;
-            
+
             if (control == null)
             {
                 throw new Exception(
@@ -118,15 +120,59 @@ namespace WhoseShoutFormsPrism.Controls
 
             if (newValue != null)
             {
+                int i = 0;
                 foreach (var t in ((ObservableCollection<T>)newValue).Where(x => x != null))
                 {
-                    var view = control.ViewFor(t, control.ParentVM);
+
+                    var view = control.ViewFor(t, control.ParentVM, GetColour(i));
                     if (view != null)
                     {
+                        //view.BackgroundColor = Color.FromHex("#2980b9");
+                        //view.BackgroundColor = Color.Red;
                         control.Children.Add(view);
                     }
+                    i++;
                 }
             }
+        }
+
+        private static string GetColour(int i)
+        {
+            Random r = new Random();
+            //string colour = "#000000";
+            //if (i % 2 == 0)
+            //{
+            //    colour = "#279371";
+            //}
+            //else
+            //{
+            //    colour = "#434cba";
+            //}
+
+            List<string> Colour = new List<string>() {
+                "#c62828",//red
+                "#ad1457",//pink
+                "#6a1b9a",//purple
+                "#4527a0",//deep purple
+                "#283593",//indigo
+                "#1565c0",//blue
+                "#0277bd",//l blue
+                "#00838f",//cyyan
+                "#00695c",//teal
+                "#2e7d32",//green
+                "#558b2f",//l green
+                "#9e9d24",//yello
+                "#f9a825",//lime
+                "#ff8f00",//amber
+                "#ef6c00",//orange
+                "#d84315",//deep orange
+                "#4e342e",//Brown
+                "#424242",//Grey
+                "#37474f",//BlueGrey
+            };
+
+
+            return Colour[r.Next(19)];
         }
     }
 }

@@ -22,6 +22,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public DelegateCommand LogoutCommand { get; }
         public DelegateCommand NewShoutCommand { get; }
         public DelegateCommand BuyCommand { get; }
+        public DelegateCommand RefreshCommand { get; }
 
         private bool m_NoGroups;
         public bool NoGroups
@@ -29,7 +30,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             get { return m_NoGroups; }
             set { SetProperty(ref m_NoGroups, value); }
         }
-        
+
         private ShoutGroupDto m_ShoutGroupDto = new ShoutGroupDto();
         public ShoutGroupDto ShoutGroupDto
         {
@@ -55,25 +56,26 @@ namespace WhoseShoutFormsPrism.ViewModels
             m_EventAggregator = eventAggregator;
             LogoutCommand = new DelegateCommand(OnLogoutCommandExecuted);
             NewShoutCommand = new DelegateCommand(OnNewShoutCommandExecuted);
+            RefreshCommand = new DelegateCommand(OnRefreshCommand);
         }
 
         public override void OnNavigatingTo(NavigationParameters parameters)
         {
             base.OnNavigatingTo(parameters);
-            LoadData();
+            Task.Run(async () => { await LoadData(); });
             m_EventAggregator.GetEvent<GroupsLoadedEvent>().Publish();
         }
 
         private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
 
-        public async void LoadData()
+        public async Task LoadData()
         {
             //ShoutGroupDto = ShoutGroups.First();
             ShoutGroupDto = Settings.Current.ShoutGroups?.FirstOrDefault();
             foreach (ShoutGroupDto sg in Settings.Current.ShoutGroups)
             {
                 //Move to a better call
-                ShoutsForGroup = await LoadShoutsForGroup(ShoutGroupDto.ID.ToString());
+                ShoutsForGroup = await LoadShoutsForGroup(sg.ID.ToString());
                 NoGroups = false;
             }
         }
@@ -88,6 +90,21 @@ namespace WhoseShoutFormsPrism.ViewModels
             return new List<ShoutDto>();
         }
 
+        public async Task RefreshGroups()
+        {
+            var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
+            Settings.Current.ShoutGroups = new System.Collections.ObjectModel.ObservableCollection<ShoutGroupDto>(groups);
+            RaisePropertyChanged(nameof(ShoutGroups));
+        }
+
+        public async void OnRefreshCommand()
+        {
+            IsBusy = true;
+            await RefreshGroups();
+            await LoadData();
+            IsBusy = false;
+        }
+
         public void OnLogoutCommandExecuted() => _authenticationService.Logout();
 
         public async void OnNewShoutCommandExecuted()
@@ -99,7 +116,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
             NavigationParameters nav = new NavigationParameters();
             nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID });
-            nav.Add("users", ShoutGroupDto.Users);
+            nav.Add("users", e.Group.Users);
 
             await _navigationService.NavigateAsync("MainPage/BuyPage", nav);
         }

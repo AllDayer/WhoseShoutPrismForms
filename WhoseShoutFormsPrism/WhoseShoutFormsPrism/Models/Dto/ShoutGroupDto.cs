@@ -12,6 +12,7 @@ namespace WhoseShoutWebService.Models
         public List<ShoutUserDto> Users { get; set; }
         public List<ShoutDto> Shouts { get; set; }
 
+        [Newtonsoft.Json.JsonIgnore]
         public String WhoseShoutDisplay
         {
             get
@@ -27,6 +28,8 @@ namespace WhoseShoutWebService.Models
                 }
             }
         }
+
+        [Newtonsoft.Json.JsonIgnore]
         public ShoutUserDto WhoseShout
         {
             get

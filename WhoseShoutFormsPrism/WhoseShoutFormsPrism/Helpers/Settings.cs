@@ -93,6 +93,19 @@ namespace WhoseShoutFormsPrism.Helpers
             set { SetProperty(value); }
         }
 
+        public byte[] Avatar
+        {
+            get { return GetProperty<byte[]>(); }
+            set { SetProperty(value); }
+        }
+
+        public String AvatarUrl
+        {
+            get { return GetProperty<String>(); }
+            set { SetProperty(value); }
+        }
+
+
         public ObservableCollection<ShoutGroupDto> ShoutGroups { get; set; }
     }
 }

@@ -9,17 +9,22 @@
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
     <ScrollView>
-        <StackLayout>
-            <Label Text="New group name" />
+        <StackLayout Margin="10">
             <Entry Placeholder="New group name" Text="{Binding ShoutName}"/>
 
-            <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}" />
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Track Cost?"/>
+                <Switch x:Name="toggle"></Switch>
+            </StackLayout>
+            <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}"  />
 
-            <Button Image="ic_person_add_black_48dp.png" BackgroundColor="Transparent" BorderColor="Transparent" Command="{Binding AddUserToGroupCommand}"/>
+            <Button Image="ic_account_plus_white_48dp.png" BackgroundColor="Transparent" BorderColor="Transparent" Command="{Binding AddUserToGroupCommand}"/>
 
             <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
-            <Button Text="Create" Command="{Binding CreateGroupCommand}"/>
-
+            <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+                <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="#03A9F4" />
+                <Button Text="Create!" Command="{Binding CreateGroupCommand}" BackgroundColor="#03A9F4"/>
+            </StackLayout>
 
         </StackLayout>
     </ScrollView>
