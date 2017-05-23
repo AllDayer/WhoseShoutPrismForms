@@ -11,12 +11,28 @@
     <ScrollView>
         <StackLayout Margin="10">
             <Entry Placeholder="New group name" Text="{Binding ShoutName}"/>
-
+            
             <StackLayout Orientation="Horizontal">
                 <Label Text="Track Cost?"/>
                 <Switch x:Name="toggle"></Switch>
+                <Button Text="" Command="{Binding ClickColour}" BackgroundColor="{Binding SelectedColour}" HeightRequest="50"  WidthRequest="50" HorizontalOptions="Center"/>
             </StackLayout>
-            <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}"  />
+
+            <control:GridListView 
+                        x:Name="GridColours"
+                        HorizontalOptions="FillAndExpand"
+                        Grid.Row="1"
+                        VerticalOptions="FillAndExpand"
+                        RowSpacing="20"
+                        ColumnSpacing="20"
+                        MaxColumns="5"
+                        IsClippedToBounds="False"
+                        Command="{Binding ClickCommand}"
+                        CommandParameter="{Binding .}"
+                        ItemsSource="{Binding Colours}"
+                        />
+
+                <control:UserRepeaterView x:Name="repeater" ItemsSource="{Binding UsersInGroup}"  />
 
             <Button Image="ic_account_plus_white_48dp.png" BackgroundColor="Transparent" BorderColor="Transparent" Command="{Binding AddUserToGroupCommand}"/>
 

@@ -95,7 +95,7 @@ namespace WhoseShoutFormsPrism.Services
                     return await ReadAsAsync<ShoutUserDto>(response.Content);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -146,7 +146,7 @@ namespace WhoseShoutFormsPrism.Services
                     response.EnsureSuccessStatusCode();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return;
             }

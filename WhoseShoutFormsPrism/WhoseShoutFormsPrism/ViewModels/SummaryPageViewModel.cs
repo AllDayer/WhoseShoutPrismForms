@@ -66,7 +66,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             m_EventAggregator.GetEvent<GroupsLoadedEvent>().Publish();
         }
 
-        private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
+        //private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
 
         public async Task LoadData()
         {
@@ -115,7 +115,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public async void OnBuyCommandExecuted(BuyRoundArgs e)
         {
             NavigationParameters nav = new NavigationParameters();
-            nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID });
+            nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID, ShoutGroupName = e.Group.Name });
             nav.Add("users", e.Group.Users);
 
             await _navigationService.NavigateAsync("MainPage/BuyPage", nav);

@@ -15,16 +15,22 @@ namespace WhoseShoutFormsPrism.ViewModels
         INavigationService m_NavigationService;
         private ShoutDto m_Shout = new ShoutDto();
 
+        public DelegateCommand BuyCommand { get; }
+        public DelegateCommand CancelCommand { get; }
+        public DelegateCommand EditGroupCommand { get; }
+
         public ObservableCollection<ShoutUserDto> UsersForShout { get; set; }
 
         public BuyPageViewModel(INavigationService navigationService) : base(navigationService)
         {
+            Title = "Record";
             m_NavigationService = navigationService;
-            BuyCommand = new DelegateCommand(OnBuyCommandExecuted);
+            BuyCommand = new DelegateCommand(OnBuyCommand, BuyCommandCanExecute).ObservesProperty(() => UserDto);
+            CancelCommand = new DelegateCommand(OnCancelCommand);
+            EditGroupCommand = new DelegateCommand(OnEditGroupCommand);
             UsersForShout = new ObservableCollection<ShoutUserDto>();
         }
 
-        public DelegateCommand BuyCommand { get; }
 
         public String ID
         {
@@ -44,6 +50,15 @@ namespace WhoseShoutFormsPrism.ViewModels
             get
             {
                 return m_Shout.ShoutGroupID.ToString();
+            }
+        }
+
+
+        public String ShoutTitle
+        {
+            get
+            {
+                return m_Shout.ShoutGroupName;
             }
         }
 
@@ -112,7 +127,9 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
-        public async void OnBuyCommandExecuted()
+        private bool BuyCommandCanExecute() => UserDto != null;
+
+        public async void OnBuyCommand()
         {
             m_Shout.PurchaseTimeUtc = DateTime.UtcNow;
             m_Shout.ShoutUserID = UserDto.ID;
@@ -125,6 +142,17 @@ namespace WhoseShoutFormsPrism.ViewModels
             
             await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
             //await m_NavigationService.GoBackAsync();
+        }
+
+        public async void OnCancelCommand()
+        {
+            //Are you sure
+            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
+        }
+
+        public async void OnEditGroupCommand()
+        {
+
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)
@@ -144,6 +172,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             m_Shout = (ShoutDto)parameters["model"];
             RaisePropertyChanged(nameof(GroupID));
             RaisePropertyChanged(nameof(ID));
+            RaisePropertyChanged(nameof(ShoutTitle));
 
             foreach (var u in ((List<ShoutUserDto>)parameters["users"]))
             {
