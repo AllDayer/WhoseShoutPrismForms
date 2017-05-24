@@ -14,6 +14,7 @@ namespace WhoseShoutFormsPrism.ViewModels
     {
         INavigationService m_NavigationService;
         private ShoutDto m_Shout = new ShoutDto();
+        private ShoutGroupDto m_ShoutGroup = new ShoutGroupDto();
 
         public DelegateCommand BuyCommand { get; }
         public DelegateCommand CancelCommand { get; }
@@ -152,7 +153,10 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         public async void OnEditGroupCommand()
         {
-
+            NavigationParameters nav = new NavigationParameters();
+            nav.Add("group", m_ShoutGroup);
+            nav.Add("shout", m_Shout);
+            await _navigationService.NavigateAsync("NavigationPage/ShoutGroupPage", nav);
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)
@@ -173,10 +177,18 @@ namespace WhoseShoutFormsPrism.ViewModels
             RaisePropertyChanged(nameof(GroupID));
             RaisePropertyChanged(nameof(ID));
             RaisePropertyChanged(nameof(ShoutTitle));
+            RaisePropertyChanged(nameof(Cost));
 
-            foreach (var u in ((List<ShoutUserDto>)parameters["users"]))
+            m_ShoutGroup = (ShoutGroupDto)parameters["group"];
+
+            foreach (var u in m_ShoutGroup.Users)
             {
                 UsersForShout.Add(u);
+            }
+
+            if(m_Shout.ShoutUserID != Guid.Empty)
+            {
+                SelectedIndex = UsersForShout.IndexOf(UsersForShout.FirstOrDefault(x => x.ID == m_Shout.ShoutUserID));
             }
 
             RaisePropertyChanged("UserName");

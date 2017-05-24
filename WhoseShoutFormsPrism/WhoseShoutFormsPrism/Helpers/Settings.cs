@@ -2,6 +2,7 @@
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -104,8 +105,7 @@ namespace WhoseShoutFormsPrism.Helpers
             get { return GetProperty<String>(); }
             set { SetProperty(value); }
         }
-
-
+        
         public ObservableCollection<ShoutGroupDto> ShoutGroups { get; set; }
     }
 }

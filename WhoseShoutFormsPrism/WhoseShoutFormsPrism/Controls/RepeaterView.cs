@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WhoseShoutFormsPrism.Helpers;
 using WhoseShoutFormsPrism.ViewModels;
 using WhoseShoutFormsPrism.Views;
 using WhoseShoutWebService.Models;
@@ -22,9 +23,9 @@ namespace WhoseShoutFormsPrism.Controls
             m_ViewModels = new List<BaseViewModel>();
         }
 
-        protected override View ViewFor(object vm, object parentVM, string bgColour)
+        protected override View ViewFor(object vm, object parentVM, string bgColour, int i)
         {
-            return new AddUserToGroupCard() { ShoutGroupVM = (NewShoutGroupPageViewModel)parentVM, BindingContext = vm };
+            return new AddUserToGroupCard() { ShoutGroupVM = (ShoutGroupPageViewModel)parentVM, BindingContext = vm, Index = i };
         }
     }
 
@@ -39,9 +40,14 @@ namespace WhoseShoutFormsPrism.Controls
             m_ViewModels = new List<BaseViewModel>();
         }
 
-        protected override View ViewFor(object vm, object parentVM, string bgColour)
+        protected override View ViewFor(object vm, object parentVM, string bgColour, int i)
         {
-            return new ShoutSummaryGroupCard() { SummaryVM = (SummaryPageViewModel)parentVM, BGColour = bgColour, BindingContext = vm };
+            var colour = bgColour;
+            //if ( Settings.Current.GroupColourDictionary.ContainsKey( ((ShoutGroupDto)vm).ID))
+            //{
+            //    colour = Settings.Current.GroupColourDictionary[((ShoutGroupDto)vm).ID];
+            //}
+            return new ShoutSummaryGroupCard() { SummaryVM = (SummaryPageViewModel)parentVM, BGColour = colour, BindingContext = vm };
         }
     }
 
@@ -67,7 +73,7 @@ namespace WhoseShoutFormsPrism.Controls
             set { SetValue(ParentVMProperty, value); }
         }
 
-        protected virtual View ViewFor(object vm, object parent, string bgColour)
+        protected virtual View ViewFor(object vm, object parent, string bgColour, int index)
         {
             return null;
         }
@@ -88,7 +94,7 @@ namespace WhoseShoutFormsPrism.Controls
                 foreach (T item in e.NewItems)
                 {
 
-                    var view = control.ViewFor(item, control.ParentVM, GetColour(i));
+                    var view = control.ViewFor(item, control.ParentVM, GetColour(i), i);
                     if (view != null)
                     {
                         control.Children.Add(view);
@@ -99,6 +105,16 @@ namespace WhoseShoutFormsPrism.Controls
                 this.UpdateChildrenLayout();
                 this.InvalidateLayout();
             }
+
+            if(sender is ObservableCollection<T>)
+            {
+                if(((ObservableCollection<T>)sender).Count == 0)
+                {
+                    var control = this as RepeaterView<T>;
+                    control.Children.Clear();
+                }
+            }
+
         }
 
         private static void ItemsChanged(
@@ -124,7 +140,7 @@ namespace WhoseShoutFormsPrism.Controls
                 foreach (var t in ((ObservableCollection<T>)newValue).Where(x => x != null))
                 {
 
-                    var view = control.ViewFor(t, control.ParentVM, GetColour(i));
+                    var view = control.ViewFor(t, control.ParentVM, GetColour(i), i);
                     if (view != null)
                     {
                         //view.BackgroundColor = Color.FromHex("#2980b9");

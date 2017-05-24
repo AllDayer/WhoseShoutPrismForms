@@ -59,7 +59,7 @@
     <Compile Include="ViewModels\LoginPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\NewShoutGroupPageViewModel.cs" />
+    <Compile Include="ViewModels\ShoutGroupPageViewModel.cs" />
     <Compile Include="ViewModels\SummaryPageViewModel.cs" />
     <Compile Include="Views\GridItemTemplate.xaml.cs">
       <DependentUpon>GridItemTemplate.xaml</DependentUpon>
@@ -67,8 +67,8 @@
     <Compile Include="Views\BuyPage.xaml.cs">
       <DependentUpon>BuyPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewShoutGroupPage.xaml.cs">
-      <DependentUpon>NewShoutGroupPage.xaml</DependentUpon>
+    <Compile Include="Views\ShoutGroupPage.xaml.cs">
+      <DependentUpon>ShoutGroupPage.xaml</DependentUpon>
     </Compile>
     <!--<Compile Include="Views\ShoutSummaryGroupCard.cs" />-->
     <Compile Include="Views\AddUserToGroupCard.xaml.cs">
@@ -198,7 +198,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\NewShoutGroupPage.xaml">
+    <EmbeddedResource Include="Views\ShoutGroupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

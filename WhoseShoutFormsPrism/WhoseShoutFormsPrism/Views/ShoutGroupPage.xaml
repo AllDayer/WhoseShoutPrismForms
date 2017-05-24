@@ -4,13 +4,14 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
-             x:Class="WhoseShoutFormsPrism.Views.NewShoutGroupPage">
+             x:Class="WhoseShoutFormsPrism.Views.ShoutGroupPage">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
+        <ToolbarItem Text="Cancel" Command="{Binding CancelCommand}" />
     </ContentPage.ToolbarItems>
     <ScrollView>
         <StackLayout Margin="10">
-            <Entry Placeholder="New group name" Text="{Binding ShoutName}"/>
+            <Entry Placeholder="Group name" Text="{Binding ShoutName}"/>
             
             <StackLayout Orientation="Horizontal">
                 <Label Text="Track Cost?"/>

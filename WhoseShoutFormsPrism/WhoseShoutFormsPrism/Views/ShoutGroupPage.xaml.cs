@@ -5,11 +5,11 @@ using Xamarin.Forms;
 
 namespace WhoseShoutFormsPrism.Views
 {
-    public partial class NewShoutGroupPage : ContentPage
+    public partial class ShoutGroupPage : ContentPage
     {
         private readonly IEventAggregator _ea;
 
-        public NewShoutGroupPage(IEventAggregator eventAggregator)
+        public ShoutGroupPage(IEventAggregator eventAggregator)
         {
             InitializeComponent();
             _ea = eventAggregator;
@@ -26,20 +26,20 @@ namespace WhoseShoutFormsPrism.Views
 
             //var tapGestureRecognizer = new TapGestureRecognizer
             //{
-            //    Command = ((NewShoutGroupPageViewModel)BindingContext).ClickCommand,
+            //    Command = ((ShoutGroupPageViewModel)BindingContext).ClickCommand,
             //    CommandParameter = "123",
             //    NumberOfTapsRequired = 1,
             //};
 
             //Hello.GestureRecognizers.Add(tapGestureRecognizer);
-            ((NewShoutGroupPageViewModel)BindingContext).PropertyChanged += NewShoutGroupPage_PropertyChanged;
+            ((ShoutGroupPageViewModel)BindingContext).PropertyChanged += ShoutGroupPage_PropertyChanged;
         }
 
-        private void NewShoutGroupPage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ShoutGroupPage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "ShowColours")
             {
-                if (((NewShoutGroupPageViewModel)sender).ShowColours)
+                if (((ShoutGroupPageViewModel)sender).ShowColours)
                 {
                     GridColours.IsVisible = true;
                     GridColours.FadeTo(1, 300, Easing.CubicIn);
@@ -57,7 +57,7 @@ namespace WhoseShoutFormsPrism.Views
         private void SetRepeater()
         {
             repeater.ParentVM = BindingContext;
-            //repeater.ItemsSource = ((NewShoutGroupPageViewModel)BindingContext).UsersInGroup;
+            //repeater.ItemsSource = ((ShoutGroupPageViewModel)BindingContext).UsersInGroup;
         }
 
         protected override void OnDisappearing()

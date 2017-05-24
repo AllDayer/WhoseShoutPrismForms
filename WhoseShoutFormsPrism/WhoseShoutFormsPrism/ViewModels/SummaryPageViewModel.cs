@@ -109,14 +109,16 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         public async void OnNewShoutCommandExecuted()
         {
-            await _navigationService.NavigateAsync("MainPage/NewShoutGroupPage");
+            await _navigationService.NavigateAsync("MainPage/ShoutGroupPage");
         }
 
         public async void OnBuyCommandExecuted(BuyRoundArgs e)
         {
+            var cost = e.Group.Shouts.Count > 0 ? e.Group.Shouts.Last().Cost : 0 ;
+            var shoutID = e.Group.WhoseShout != null ? e.Group.WhoseShout.ID : Guid.Empty;
             NavigationParameters nav = new NavigationParameters();
-            nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID, ShoutGroupName = e.Group.Name });
-            nav.Add("users", e.Group.Users);
+            nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID, ShoutGroupName = e.Group.Name, Cost = cost, ShoutUserID = shoutID });
+            nav.Add("group", e.Group);
 
             await _navigationService.NavigateAsync("MainPage/BuyPage", nav);
         }

@@ -12,8 +12,12 @@ namespace WhoseShoutFormsPrism.Views
 {
     public partial class AddUserToGroupCard : ContentView
     {
-        public NewShoutGroupPageViewModel ShoutGroupVM { get; set; }
+        //Should be a view model
+        public ShoutGroupPageViewModel ShoutGroupVM { get; set; }
         public String BGColor { get; set; }
+        public int Index { get; set; }
+        //
+
 
         public AddUserToGroupCard()
         {
@@ -22,7 +26,12 @@ namespace WhoseShoutFormsPrism.Views
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
+            this.Remove.Clicked += Remove_Clicked;
         }
-        
+
+        private void Remove_Clicked(object sender, EventArgs e)
+        {
+            ShoutGroupVM.RemoveUserCommand.Execute(Index);
+        }
     }
 }

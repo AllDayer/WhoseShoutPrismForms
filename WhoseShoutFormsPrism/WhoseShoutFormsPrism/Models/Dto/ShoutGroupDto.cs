@@ -13,6 +13,9 @@ namespace WhoseShoutWebService.Models
         public List<ShoutDto> Shouts { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
+        public string Colour { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
         public String WhoseShoutDisplay
         {
             get
