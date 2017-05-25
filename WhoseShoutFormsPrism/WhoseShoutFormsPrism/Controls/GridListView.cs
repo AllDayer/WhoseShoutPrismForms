@@ -85,59 +85,62 @@ namespace WhoseShoutFormsPrism.Controls
             Children?.Clear();
             RowDefinitions?.Clear();
 
-            var items = ItemsSource as IList ?? ItemsSource.ToList();
-            //var enumerable = tiles as IList ?? tiles.ToList();
-            var numberOfRows = Math.Ceiling(((double)items.Count / (int)MaxColumns));
-
-            for (var i = 0; i < numberOfRows; i++)
+            if (ItemsSource != null)
             {
-                RowDefinitions?.Add(new RowDefinition { Height = 25 });
-            }
+                var items = ItemsSource as IList ?? ItemsSource.ToList();
+                //var enumerable = tiles as IList ?? tiles.ToList();
+                var numberOfRows = Math.Ceiling(((double)items.Count / (int)MaxColumns));
 
-            for (var index = 0; index < items.Count; index++)
-            {
-                var column = index % (int)MaxColumns;
-                var row = (int)Math.Floor(((double)index / (int)MaxColumns));
+                for (var i = 0; i < numberOfRows; i++)
+                {
+                    RowDefinitions?.Add(new RowDefinition { Height = 25 });
+                }
 
-                //var tile = BuildTile(items[index]);
-                var tile = items[index];
+                for (var index = 0; index < items.Count; index++)
+                {
+                    var column = index % (int)MaxColumns;
+                    var row = (int)Math.Floor(((double)index / (int)MaxColumns));
 
-                //var buildTile = (Layout)Activator.CreateInstance(typeof(GridItemTemplate), tile);
-                //buildTile.BackgroundColor = Color.Transparent;
-                //buildTile.InputTransparent = false;
+                    //var tile = BuildTile(items[index]);
+                    var tile = items[index];
 
+                    //var buildTile = (Layout)Activator.CreateInstance(typeof(GridItemTemplate), tile);
+                    //buildTile.BackgroundColor = Color.Transparent;
+                    //buildTile.InputTransparent = false;
+
+                    //var tapGestureRecognizer = new TapGestureRecognizer
+                    //{
+                    //    Command = Command,
+                    //    CommandParameter = tile,
+                    //    NumberOfTapsRequired = 1,
+                    //};
+
+                    //buildTile?.GestureRecognizers.Add(tapGestureRecognizer);
+
+                    Button b = new Button()
+                    {
+                        BackgroundColor = Color.FromHex((string)items[index]),
+                        Command = Command,
+                        CommandParameter = index,
+                        BorderRadius = 5,
+                        VerticalOptions = LayoutOptions.FillAndExpand,
+                        HorizontalOptions = LayoutOptions.FillAndExpand
+                    };
+
+                    //Children?.Add(buildTile, column, row);
+                    Children?.Add(b, column, row);
+                }
+                this.BackgroundColor = Color.Transparent;
+                this.InputTransparent = true;
                 //var tapGestureRecognizer = new TapGestureRecognizer
                 //{
                 //    Command = Command,
-                //    CommandParameter = tile,
+                //    CommandParameter = "123",
                 //    NumberOfTapsRequired = 1,
+
                 //};
-
-                //buildTile?.GestureRecognizers.Add(tapGestureRecognizer);
-
-                Button b = new Button()
-                {
-                    BackgroundColor = Color.FromHex((string)items[index]),
-                    Command = Command,
-                    CommandParameter = index,
-                    BorderRadius = 5,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                    HorizontalOptions = LayoutOptions.FillAndExpand
-                };
-
-                //Children?.Add(buildTile, column, row);
-                Children?.Add(b, column, row);
+                //this.GestureRecognizers.Add(tapGestureRecognizer);
             }
-            this.BackgroundColor = Color.Transparent;
-            this.InputTransparent = true;
-            //var tapGestureRecognizer = new TapGestureRecognizer
-            //{
-            //    Command = Command,
-            //    CommandParameter = "123",
-            //    NumberOfTapsRequired = 1,
-
-            //};
-            //this.GestureRecognizers.Add(tapGestureRecognizer);
         }
 
         private Layout BuildTile(object item1)

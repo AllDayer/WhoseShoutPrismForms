@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WhoseShoutWebService.Models;
 using WhoseShoutFormsPrism.Models;
 using WhoseShoutFormsPrism.ViewModels;
+using System.Linq;
 
 namespace WhoseShoutFormsPrism.Services
 {
@@ -48,11 +49,9 @@ namespace WhoseShoutFormsPrism.Services
                 if (!String.IsNullOrEmpty(Settings.Current.SocialUserID))
                 {
                     userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
-                }
-
-                Settings.Current.UserGuid = userDto.ID;
-
-
+                    Settings.Current.UserGuid = userDto.ID;
+                }                
+                
                 if (userDto == null ||
                     name != userDto.UserName ||
                     socialID != userDto.ShoutSocialID ||
@@ -169,7 +168,17 @@ namespace WhoseShoutFormsPrism.Services
         public void Logout()
         {
             Settings.Current.UserName = string.Empty;
-            m_NavigationService.NavigateAsync("/Login");
+            Settings.Current.SocialUserID = string.Empty;
+
+            System.Collections.Generic.IEnumerable<Account> accounts = AccountStore.Create().FindAccountsForService("Facebook");
+            if (accounts != null)
+            {
+                if (accounts.FirstOrDefault() != null)
+                {
+                    AccountStore.Create().Delete(accounts.FirstOrDefault(), "Facebook");
+                }
+            }
+            m_NavigationService.NavigateAsync("/LoginPage");
         }
     }
 }

@@ -77,7 +77,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
             Settings.Current.ShoutGroups = new System.Collections.ObjectModel.ObservableCollection<ShoutGroupDto>(groups);
 
-            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
+            await _navigationService.NavigateAsync("/NavigationPage/SummaryPage");
         }
 
         public async void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)

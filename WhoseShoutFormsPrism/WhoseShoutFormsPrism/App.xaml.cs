@@ -14,7 +14,7 @@ namespace WhoseShoutFormsPrism
         {
             InitializeComponent();
 
-            NavigationService.NavigateAsync("NavigationPage/LoginPage");
+            NavigationService.NavigateAsync("/LoginPage");
         }
 
         protected override void RegisterTypes()
@@ -25,6 +25,7 @@ namespace WhoseShoutFormsPrism
             Container.RegisterTypeForNavigation<SummaryPage>();
             Container.RegisterTypeForNavigation<BuyPage>();
             Container.RegisterTypeForNavigation<ShoutGroupPage>();
+            Container.RegisterTypeForNavigation<HistoryPage>();
 
             Container.Register<IAuthenticationService, AuthenticationService>(Reuse.Singleton);
 

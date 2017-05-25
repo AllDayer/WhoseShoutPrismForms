@@ -109,7 +109,7 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         public async void OnNewShoutCommandExecuted()
         {
-            await _navigationService.NavigateAsync("MainPage/ShoutGroupPage");
+            await _navigationService.NavigateAsync("ShoutGroupPage");
         }
 
         public async void OnBuyCommandExecuted(BuyRoundArgs e)
@@ -120,7 +120,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID, ShoutGroupName = e.Group.Name, Cost = cost, ShoutUserID = shoutID });
             nav.Add("group", e.Group);
 
-            await _navigationService.NavigateAsync("MainPage/BuyPage", nav);
+            await _navigationService.NavigateAsync("BuyPage", nav);
         }
     }
 }

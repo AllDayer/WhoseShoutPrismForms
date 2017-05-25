@@ -19,6 +19,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public DelegateCommand BuyCommand { get; }
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand EditGroupCommand { get; }
+        public DelegateCommand HistoryCommand { get; }
 
         public ObservableCollection<ShoutUserDto> UsersForShout { get; set; }
 
@@ -29,6 +30,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             BuyCommand = new DelegateCommand(OnBuyCommand, BuyCommandCanExecute).ObservesProperty(() => UserDto);
             CancelCommand = new DelegateCommand(OnCancelCommand);
             EditGroupCommand = new DelegateCommand(OnEditGroupCommand);
+            HistoryCommand = new DelegateCommand(OnHistoryCommand);
             UsersForShout = new ObservableCollection<ShoutUserDto>();
         }
 
@@ -141,14 +143,16 @@ namespace WhoseShoutFormsPrism.ViewModels
             //Sync with server
             await CurrentApp.Current.MainViewModel.ServiceApi.NewShout(m_Shout);
             
-            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
-            //await m_NavigationService.GoBackAsync();
+            //await _navigationService.NavigateAsync("SummaryPage");
+            await m_NavigationService.GoBackAsync();
         }
 
         public async void OnCancelCommand()
         {
             //Are you sure
-            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage");
+            //await _navigationService.NavigateAsync("SummaryPage");
+            await m_NavigationService.GoBackAsync();
+
         }
 
         public async void OnEditGroupCommand()
@@ -156,7 +160,14 @@ namespace WhoseShoutFormsPrism.ViewModels
             NavigationParameters nav = new NavigationParameters();
             nav.Add("group", m_ShoutGroup);
             nav.Add("shout", m_Shout);
-            await _navigationService.NavigateAsync("NavigationPage/ShoutGroupPage", nav);
+            await _navigationService.NavigateAsync("ShoutGroupPage", nav);
+        }
+
+        public async void OnHistoryCommand()
+        {
+            NavigationParameters nav = new NavigationParameters();
+            nav.Add("group", m_ShoutGroup);
+            await _navigationService.NavigateAsync("HistoryPage", nav);
         }
 
         public override void OnNavigatedFrom(NavigationParameters parameters)
@@ -168,8 +179,6 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
 
         }
-
-        public List<ShoutGroupDto> ShoutGroups { get; set; }
 
         public override void OnNavigatingTo(NavigationParameters parameters)
         {

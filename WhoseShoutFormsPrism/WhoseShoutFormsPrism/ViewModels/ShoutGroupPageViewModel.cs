@@ -72,7 +72,7 @@ namespace WhoseShoutFormsPrism.ViewModels
 
             var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
             nav.Add("model", groups);
-            await _navigationService.NavigateAsync("/MainPage/NavigationPage/SummaryPage", nav);
+            await _navigationService.NavigateAsync("/NavigationPage/SummaryPage", nav);
         }
 
         public async void OnCancelCommand()

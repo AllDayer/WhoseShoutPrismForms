@@ -3,9 +3,11 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="{Binding Title}"
+    xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
     x:Class="WhoseShoutFormsPrism.Views.LoginPage">
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
             <RowDefinition Height="3*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
@@ -15,11 +17,16 @@
                     <Setter Property="Margin" Value="40,10" />
                 </Style>
             </ResourceDictionary>
-        </Grid.Resources>
+        </Grid.Resources>-->
 
-        <StackLayout Grid.Row="0" VerticalOptions="FillAndExpand">
-            <Button Text="Login with Facebook" x:Name="OAuth" Command="{Binding OAuthCommand}"/>
+    <AbsoluteLayout>
+        <StackLayout Spacing="30" 
+                     AbsoluteLayout.LayoutBounds=".5,.25" AbsoluteLayout.LayoutFlags="PositionProportional">
+            <Label Text="NXT" FontSize="Large" HorizontalOptions="CenterAndExpand"/>
+            <Label Text="Continue with:" FontSize="Small" HorizontalOptions="CenterAndExpand"/>
+            <control:CustomImageButton Image="facebooklogin"  x:Name="OAuth" Command="{Binding OAuthCommand}" BackgroundColor="Transparent"/>
             <ActivityIndicator Color="Red" IsRunning="true" IsVisible="{Binding IsLoggingIn}"/>
         </StackLayout>
-    </Grid>
+    </AbsoluteLayout>
+    <!--</Grid>-->
 </ContentPage>
