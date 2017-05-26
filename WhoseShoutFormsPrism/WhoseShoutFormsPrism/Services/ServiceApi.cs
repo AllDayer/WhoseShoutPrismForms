@@ -31,6 +31,14 @@ namespace WhoseShoutFormsPrism.Services
             return await client.PostAsync(requestUri, content);
         }
 
+        private async Task<HttpResponseMessage> PutAsJsonAsync<T>(HttpClient client, string requestUri, T value)
+        {
+            string contentString = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            StringContent content = new System.Net.Http.StringContent(contentString, Encoding.UTF8, "application/json");
+
+            return await client.PutAsync(requestUri, content);
+        }
+
         private async Task<HttpResponseMessage> PatchAsJsonAsync<T>(HttpClient client, string requestUri, T value)
         {
             string contentString = Newtonsoft.Json.JsonConvert.SerializeObject(value);
@@ -147,6 +155,22 @@ namespace WhoseShoutFormsPrism.Services
                 }
             }
             catch (Exception)
+            {
+                return;
+            }
+        }
+
+        public async Task PutGroup(ShoutGroupDto group)
+        {
+            try
+            {
+                using (var client = NewHttpClient())
+                {
+                    var response = await PutAsJsonAsync(client, "api/shoutgroups/" + group.ID, group);
+                    response.EnsureSuccessStatusCode();
+                }
+            }
+            catch (Exception e)
             {
                 return;
             }

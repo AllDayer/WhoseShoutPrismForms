@@ -32,7 +32,10 @@ namespace WhoseShoutFormsPrism.Views
             //};
 
             //Hello.GestureRecognizers.Add(tapGestureRecognizer);
-            ((ShoutGroupPageViewModel)BindingContext).PropertyChanged += ShoutGroupPage_PropertyChanged;
+            if (BindingContext != null)
+            {
+                ((ShoutGroupPageViewModel)BindingContext).PropertyChanged += ShoutGroupPage_PropertyChanged;
+            }
         }
 
         private void ShoutGroupPage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

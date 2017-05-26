@@ -40,7 +40,7 @@ namespace WhoseShoutFormsPrism.Services
                 try
                 {
                     Settings.Current.AvatarUrl = fbUser["picture"]["data"]["url"].ToString();
-                    Settings.Current.Avatar = await CurrentApp.Current.MainViewModel.ServiceApi.GetAvatar(Settings.Current.AvatarUrl);
+                    //Settings.Current.Avatar = await CurrentApp.Current.MainViewModel.ServiceApi.GetAvatar(Settings.Current.AvatarUrl);
                 }
                 catch (Exception)
                 { }

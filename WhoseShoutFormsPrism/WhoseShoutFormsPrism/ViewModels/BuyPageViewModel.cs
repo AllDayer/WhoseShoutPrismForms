@@ -65,6 +65,14 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
+        public bool TrackCost
+        {
+            get
+            {
+                return m_ShoutGroup.TrackCost;
+            }
+        }
+
         public String Cost
         {
             get
@@ -160,6 +168,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             NavigationParameters nav = new NavigationParameters();
             nav.Add("group", m_ShoutGroup);
             nav.Add("shout", m_Shout);
+            nav.Add("edit", true);
             await _navigationService.NavigateAsync("ShoutGroupPage", nav);
         }
 
@@ -189,6 +198,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             RaisePropertyChanged(nameof(Cost));
 
             m_ShoutGroup = (ShoutGroupDto)parameters["group"];
+            RaisePropertyChanged(nameof(TrackCost));
 
             foreach (var u in m_ShoutGroup.Users)
             {

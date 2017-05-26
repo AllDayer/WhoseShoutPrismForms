@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using WhoseShoutFormsPrism.Helpers;
 using WhoseShoutFormsPrism.Models;
 using WhoseShoutFormsPrism.Services;
@@ -32,6 +33,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public ShoutDto ShoutFromEdit { get; set; }
         public String ShoutName { get; set; }
         public ObservableCollection<String> Colours { get; set; } = new ObservableCollection<String>();
+        public bool IsEdit { get; set; } = false;
 
         public ShoutGroupPageViewModel(INavigationService navigationService, IEventAggregator eventAggregator) : base(navigationService)
         {
@@ -55,29 +57,48 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         public async void OnCreateGroupCommand()
         {
-            Group = new ShoutGroupDto()
+            if (IsEdit)
             {
-                ID = Guid.NewGuid(),
-                Name = ShoutName,
-                Users = UsersInGroup.ToList()
-            };
+                Group.Name = ShoutName;
+                Group.Users = UsersInGroup.ToList();
+                Group.TrackCost = TrackCost;
+                await CurrentApp.Current.MainViewModel.ServiceApi.PutGroup(Group);
 
-            Group.Users.Add(new ShoutUserDto() { ID = Settings.Current.UserGuid });
-            
-            await CurrentApp.Current.MainViewModel.ServiceApi.CreateGroupCommand(Group);
+                OnGoBack();
+            }
+            else
+            {
+                Group = new ShoutGroupDto()
+                {
+                    ID = Guid.NewGuid(),
+                    Name = ShoutName,
+                    TrackCost = TrackCost,
+                    Users = UsersInGroup.ToList()
+                };
+
+                Group.Users.Add(new ShoutUserDto() { ID = Settings.Current.UserGuid });
+
+                await CurrentApp.Current.MainViewModel.ServiceApi.CreateGroupCommand(Group);
+                NavigationParameters nav = new NavigationParameters();
+
+                var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
+                nav.Add("model", groups);
+                await _navigationService.NavigateAsync("/NavigationPage/SummaryPage", nav);
+            }
 
             //Settings.Current.GroupColourDictionary.Add(Group.ID, SelectedColour);
 
-            NavigationParameters nav = new NavigationParameters();
-
-            var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
-            nav.Add("model", groups);
-            await _navigationService.NavigateAsync("/NavigationPage/SummaryPage", nav);
         }
 
-        public async void OnCancelCommand()
+        public void OnCancelCommand()
         {
             //Show Dialog
+            OnGoBack();
+        }
+
+        private async void OnGoBack()
+        {
+
             if (Group != null)
             {
                 NavigationParameters nav = new NavigationParameters();
@@ -98,6 +119,20 @@ namespace WhoseShoutFormsPrism.ViewModels
             {
                 m_SelectedColour = value;
                 RaisePropertyChanged(nameof(SelectedColour));
+            }
+        }
+
+        private bool m_TrackCost = true;
+        public bool TrackCost
+        {
+            get
+            {
+                return m_TrackCost;
+            }
+            set
+            {
+                m_TrackCost = value;
+                RaisePropertyChanged(nameof(TrackCost));
             }
         }
 
@@ -139,17 +174,24 @@ namespace WhoseShoutFormsPrism.ViewModels
                 this.Group = (ShoutGroupDto)parameters["group"];
                 RaisePropertyChanged(nameof(Group));
                 ShoutName = Group.Name;
+                TrackCost = Group.TrackCost;
                 RaisePropertyChanged(nameof(ShoutName));
                 //UsersInGroup = new ObservableCollection<ShoutUserDto>(Group.Users);
                 UsersInGroup.Clear();
-                foreach (var u in Group.Users)
-                {
-                    UsersInGroup.Add(u);
-                }
+                UsersInGroup = new ObservableCollection<ShoutUserDto>(Group.Users);
+                RaisePropertyChanged(nameof(UsersInGroup));
+                //foreach (var u in Group.Users)
+                //{
+                //    UsersInGroup.Add(u);
+                //}
             }
-            if(parameters["shout"] != null)
+            if (parameters["shout"] != null)
             {
                 ShoutFromEdit = (ShoutDto)parameters["shout"];
+            }
+            if (parameters["edit"] != null)
+            {
+                IsEdit = true;
             }
         }
 

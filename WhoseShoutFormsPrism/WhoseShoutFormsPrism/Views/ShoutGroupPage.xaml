@@ -6,7 +6,6 @@
              xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
              x:Class="WhoseShoutFormsPrism.Views.ShoutGroupPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Logout" Command="{Binding LogoutCommand}" />
         <ToolbarItem Text="Cancel" Command="{Binding CancelCommand}" />
     </ContentPage.ToolbarItems>
     <ScrollView>
@@ -15,7 +14,7 @@
             
             <StackLayout Orientation="Horizontal">
                 <Label Text="Track Cost?"/>
-                <Switch x:Name="toggle"></Switch>
+                <Switch x:Name="toggle" IsToggled="{Binding TrackCost}"></Switch>
                 <Button Text="" Command="{Binding ClickColour}" BackgroundColor="{Binding SelectedColour}" HeightRequest="50"  WidthRequest="50" HorizontalOptions="Center"/>
             </StackLayout>
 
@@ -40,7 +39,7 @@
             <!--<Picker ItemsSource="{Binding MyCountries}" SelectedIndex="{Binding SelectedIndex}"/>-->
             <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
                 <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="#03A9F4" />
-                <Button Text="Create!" Command="{Binding CreateGroupCommand}" BackgroundColor="#03A9F4"/>
+                <Button Text="Save" Command="{Binding CreateGroupCommand}" BackgroundColor="#03A9F4"/>
             </StackLayout>
 
         </StackLayout>

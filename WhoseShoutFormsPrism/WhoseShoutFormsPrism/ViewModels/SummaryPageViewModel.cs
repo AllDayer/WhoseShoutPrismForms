@@ -51,7 +51,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public SummaryPageViewModel(INavigationService navigationService, IAuthenticationService authenticationService, IEventAggregator eventAggregator)
             : base(navigationService)
         {
-            Title = "Summary";
+            Title = "NXT";
             _authenticationService = authenticationService;
             m_EventAggregator = eventAggregator;
             LogoutCommand = new DelegateCommand(OnLogoutCommandExecuted);

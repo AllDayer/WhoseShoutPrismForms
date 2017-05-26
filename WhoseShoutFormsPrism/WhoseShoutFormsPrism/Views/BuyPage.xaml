@@ -13,7 +13,7 @@
             <Label Text="Who did it?" />
             <Picker ItemsSource="{Binding UsersForShout}" ItemDisplayBinding="{Binding UserName}" SelectedIndex="{Binding SelectedIndex}"/>
         </StackLayout>
-        <StackLayout>
+        <StackLayout IsVisible="{Binding TrackCost}">
             <Label Text="Cost"/>
             <Entry Placeholder="Cost" Keyboard="Numeric" Text="{Binding Cost}"/>
         </StackLayout>
