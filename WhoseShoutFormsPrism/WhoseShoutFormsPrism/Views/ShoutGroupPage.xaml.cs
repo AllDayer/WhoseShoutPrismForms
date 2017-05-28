@@ -23,6 +23,8 @@ namespace WhoseShoutFormsPrism.Views
             base.OnBindingContextChanged();
             GridColours.IsVisible = false;
             GridColours.Opacity = 0;
+            GridIcons.IsVisible = false;
+            GridIcons.Opacity = 0;
 
             //var tapGestureRecognizer = new TapGestureRecognizer
             //{
@@ -51,6 +53,21 @@ namespace WhoseShoutFormsPrism.Views
                 {
                     var animation = new Animation(v => GridColours.Opacity = v, 1, 0);
                     animation.Commit(this, "FadeColours", 16, 250, Easing.CubicOut, (v,c) => this.GridColours.IsVisible = false);
+                    //GridColours.FadeTo(0, 300, Easing.CubicOut);
+                    //GridColours.IsVisible = false;
+                }
+            }
+            else if (e.PropertyName == "ShowIcons")
+            {
+                if (((ShoutGroupPageViewModel)sender).ShowIcons)
+                {
+                    GridIcons.IsVisible = true;
+                    GridIcons.FadeTo(1, 300, Easing.CubicIn);
+                }
+                else
+                {
+                    var animation = new Animation(v => GridIcons.Opacity = v, 1, 0);
+                    animation.Commit(this, "FadeColours", 16, 250, Easing.CubicOut, (v, c) => this.GridIcons.IsVisible = false);
                     //GridColours.FadeTo(0, 300, Easing.CubicOut);
                     //GridColours.IsVisible = false;
                 }

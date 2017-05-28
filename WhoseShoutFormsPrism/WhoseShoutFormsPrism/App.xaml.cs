@@ -28,7 +28,6 @@ namespace WhoseShoutFormsPrism
             Container.RegisterTypeForNavigation<HistoryPage>();
 
             Container.Register<IAuthenticationService, AuthenticationService>(Reuse.Singleton);
-
         }
     }
 }

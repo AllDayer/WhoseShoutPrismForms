@@ -66,6 +66,15 @@ namespace WhoseShoutFormsPrism.ViewModels
             m_EventAggregator.GetEvent<GroupsLoadedEvent>().Publish();
         }
 
+        public override void OnNavigatedTo(NavigationParameters parameters)
+        {
+            base.OnNavigatedTo(parameters);
+            if (parameters.GetNavigationMode() == NavigationMode.Back)
+            {
+                OnRefreshCommand();
+            }
+        }
+
         //private String TristanUserString = "d9c91004-3994-4bb4-a703-267904985126";
 
         public async Task LoadData()
@@ -114,7 +123,7 @@ namespace WhoseShoutFormsPrism.ViewModels
 
         public async void OnBuyCommandExecuted(BuyRoundArgs e)
         {
-            var cost = e.Group.Shouts.Count > 0 ? e.Group.Shouts.Last().Cost : 0 ;
+            var cost = e.Group.Shouts.Count > 0 ? e.Group.Shouts.Last().Cost : 0;
             var shoutID = e.Group.WhoseShout != null ? e.Group.WhoseShout.ID : Guid.Empty;
             NavigationParameters nav = new NavigationParameters();
             nav.Add("model", new ShoutDto() { ID = Guid.NewGuid(), ShoutGroupID = e.Group.ID, ShoutGroupName = e.Group.Name, Cost = cost, ShoutUserID = shoutID });

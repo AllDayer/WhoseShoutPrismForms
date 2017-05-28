@@ -28,7 +28,16 @@
                     <!--<Frame CornerRadius="5" OutlineColor="White" BackgroundColor="Transparent" Padding="5" HasShadow="False">
                         <Image x:Name="WebImage" Aspect="AspectFit" Grid.Column="0" Grid.Row="0" HorizontalOptions="Center"  VerticalOptions="Center" />
                     </Frame>-->
-                    <circle:CircleImage x:Name="circle2" Aspect="AspectFit" FillColor="#FF5722" BorderColor="White" BorderThickness="2" HeightRequest="50" WidthRequest="50" HorizontalOptions="Start"/>
+                    <circle:CircleImage x:Name="circle2" 
+                                        Aspect="AspectFit" 
+                                        FillColor="#FF5722" 
+                                        BorderColor="White" 
+                                        BorderThickness="2" 
+                                        HeightRequest="50" 
+                                        WidthRequest="50"
+                                        HorizontalOptions="Start"
+                                        Source="{Binding WhoseShout.AvatarUrl}"
+                                        />
 
                     <StackLayout Grid.Column="1">
                         <Label Text="{Binding WhoseShoutDisplay}" TextColor="White"  FontSize="Large" />

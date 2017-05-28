@@ -93,7 +93,7 @@ namespace WhoseShoutFormsPrism.Controls
 
                 for (var i = 0; i < numberOfRows; i++)
                 {
-                    RowDefinitions?.Add(new RowDefinition { Height = 25 });
+                    RowDefinitions?.Add(new RowDefinition() { Height = new GridLength(1.0, GridUnitType.Auto) });
                 }
 
                 for (var index = 0; index < items.Count; index++)
@@ -116,19 +116,37 @@ namespace WhoseShoutFormsPrism.Controls
                     //};
 
                     //buildTile?.GestureRecognizers.Add(tapGestureRecognizer);
-
-                    Button b = new Button()
+                    Button b = null;
+                    if (tile is string)
                     {
-                        BackgroundColor = Color.FromHex((string)items[index]),
-                        Command = Command,
-                        CommandParameter = index,
-                        BorderRadius = 5,
-                        VerticalOptions = LayoutOptions.FillAndExpand,
-                        HorizontalOptions = LayoutOptions.FillAndExpand
-                    };
+                        b = new Button()
+                        {
+                            BackgroundColor = Color.FromHex((string)items[index]),
+                            Command = Command,
+                            CommandParameter = index,
+                            BorderRadius = 5,
+                            VerticalOptions = LayoutOptions.FillAndExpand,
+                            HorizontalOptions = LayoutOptions.FillAndExpand
+                        };
+                        //Children?.Add(buildTile, column, row);
+                        Children?.Add(b, column, row);
+                    }
+                    else if (tile is FileImageSource)
+                    {
+                        CustomImageButton imageButton = new CustomImageButton()
+                        {
+                            Image = ((FileImageSource)items[index]),
+                            BackgroundColor = Color.Transparent,
+                            Command = Command,
+                            CommandParameter = index,
+                            BorderRadius = 5,
+                            VerticalOptions = LayoutOptions.FillAndExpand,
+                            HorizontalOptions = LayoutOptions.FillAndExpand
+                        };
+                        Children?.Add(imageButton, column, row);
 
-                    //Children?.Add(buildTile, column, row);
-                    Children?.Add(b, column, row);
+                    }
+
                 }
                 this.BackgroundColor = Color.Transparent;
                 this.InputTransparent = true;

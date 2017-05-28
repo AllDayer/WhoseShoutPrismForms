@@ -41,6 +41,7 @@
     <Compile Include="Controls\RepeaterView.cs" />
     <Compile Include="CurrentApp.cs" />
     <Compile Include="Helpers\DateTimeToStringConverter.cs" />
+    <Compile Include="Helpers\FileStorage.cs" />
     <Compile Include="Helpers\HttpClientExtension.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Models\Dto\ShoutDto.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\ISaveAndLoad.cs" />
     <Compile Include="Services\Messages.cs" />
     <Compile Include="Services\ServiceApi.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />

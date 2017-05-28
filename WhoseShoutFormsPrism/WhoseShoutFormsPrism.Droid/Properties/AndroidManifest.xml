@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="WhoseShout.WhoseShout">
 	<uses-sdk android:minSdkVersion="19" />
 	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<application android:label="com.tristan.whoseshout" android:theme="@style/MyTheme">
-    <activity android:name="com.tristan.whoseshout.MainActivity" android:label="WhoseShout" />
+		<activity android:name="com.tristan.whoseshout.MainActivity" android:label="WhoseShout" />
 		<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="842344439275386" />
 	</application>
 </manifest>

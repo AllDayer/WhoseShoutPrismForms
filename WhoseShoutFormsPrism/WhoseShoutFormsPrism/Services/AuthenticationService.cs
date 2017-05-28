@@ -36,10 +36,11 @@ namespace WhoseShoutFormsPrism.Services
                 var name = fbUser["first_name"].ToString().Replace("\"", "");
                 var socialID = fbUser["id"].ToString().Replace("\"", "");
                 var email = fbUser["email"].ToString().Replace("\"", "");
-
+                var avatarUrl = "";
                 try
                 {
-                    Settings.Current.AvatarUrl = fbUser["picture"]["data"]["url"].ToString();
+                    avatarUrl = fbUser["picture"]["data"]["url"].ToString();
+                    Settings.Current.AvatarUrl = avatarUrl;
                     //Settings.Current.Avatar = await CurrentApp.Current.MainViewModel.ServiceApi.GetAvatar(Settings.Current.AvatarUrl);
                 }
                 catch (Exception)
@@ -55,7 +56,8 @@ namespace WhoseShoutFormsPrism.Services
                 if (userDto == null ||
                     name != userDto.UserName ||
                     socialID != userDto.ShoutSocialID ||
-                    email != userDto.Email)
+                    email != userDto.Email ||
+                    avatarUrl != userDto.AvatarUrl)
                 {
                     Settings.Current.UserFirstName = name;
                     Settings.Current.SocialUserID = socialID;
@@ -124,7 +126,8 @@ namespace WhoseShoutFormsPrism.Services
             ShoutUser u = new ShoutUser()
             {
                 UserName = Settings.Current.UserFirstName,
-                Email = Settings.Current.UserEmail
+                Email = Settings.Current.UserEmail,
+                AvatarUrl = Settings.Current.AvatarUrl
 
             };
             if (newID)

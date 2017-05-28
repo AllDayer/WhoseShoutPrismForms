@@ -43,10 +43,10 @@ namespace WhoseShoutFormsPrism.Controls
         protected override View ViewFor(object vm, object parentVM, string bgColour, int i)
         {
             var colour = bgColour;
-            //if ( Settings.Current.GroupColourDictionary.ContainsKey( ((ShoutGroupDto)vm).ID))
-            //{
-            //    colour = Settings.Current.GroupColourDictionary[((ShoutGroupDto)vm).ID];
-            //}
+            if (CurrentApp.Current.MainViewModel.GroupColourDictionary.ContainsKey(((ShoutGroupDto)vm).ID))
+            {
+                colour = CurrentApp.Current.MainViewModel.GroupColourDictionary[((ShoutGroupDto)vm).ID];
+            }
             return new ShoutSummaryGroupCard() { SummaryVM = (SummaryPageViewModel)parentVM, BGColour = colour, BindingContext = vm };
         }
     }
@@ -93,11 +93,13 @@ namespace WhoseShoutFormsPrism.Controls
                 int i = 0;
                 foreach (T item in e.NewItems)
                 {
-
-                    var view = control.ViewFor(item, control.ParentVM, GetColour(i), i);
+                    var view = control.ViewFor(item, control.ParentVM, CurrentApp.Current.MainViewModel.RandomColour(), i);
                     if (view != null)
                     {
+                        view.Opacity = 0;
                         control.Children.Add(view);
+
+                        view.FadeTo(1, 300, Easing.CubicIn);
                     }
                     i++;
                 }
@@ -140,7 +142,7 @@ namespace WhoseShoutFormsPrism.Controls
                 foreach (var t in ((ObservableCollection<T>)newValue).Where(x => x != null))
                 {
 
-                    var view = control.ViewFor(t, control.ParentVM, GetColour(i), i);
+                    var view = control.ViewFor(t, control.ParentVM, CurrentApp.Current.MainViewModel.RandomColour(), i);
                     if (view != null)
                     {
                         //view.BackgroundColor = Color.FromHex("#2980b9");
@@ -150,45 +152,6 @@ namespace WhoseShoutFormsPrism.Controls
                     i++;
                 }
             }
-        }
-
-        private static string GetColour(int i)
-        {
-            Random r = new Random();
-            //string colour = "#000000";
-            //if (i % 2 == 0)
-            //{
-            //    colour = "#279371";
-            //}
-            //else
-            //{
-            //    colour = "#434cba";
-            //}
-
-            List<string> Colour = new List<string>() {
-                "#c62828",//red
-                "#ad1457",//pink
-                "#6a1b9a",//purple
-                "#4527a0",//deep purple
-                "#283593",//indigo
-                "#1565c0",//blue
-                "#0277bd",//l blue
-                "#00838f",//cyyan
-                "#00695c",//teal
-                "#2e7d32",//green
-                "#558b2f",//l green
-                "#9e9d24",//yello
-                "#f9a825",//lime
-                "#ff8f00",//amber
-                "#ef6c00",//orange
-                "#d84315",//deep orange
-                "#4e342e",//Brown
-                "#424242",//Grey
-                "#37474f",//BlueGrey
-            };
-
-
-            return Colour[r.Next(19)];
         }
     }
 }

@@ -32,7 +32,7 @@ namespace WhoseShoutFormsPrism.Views
             };
             card.GestureRecognizers.Add(tap);
             //WebImage.Source = Settings.Current.AvatarUrl;
-            circle2.Source = Settings.Current.AvatarUrl;
+            //circle2.Source = Settings.Current.AvatarUrl;
 
             Random r = new Random();
             if (r.Next(2) % 2 == 0)

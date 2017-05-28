@@ -12,6 +12,7 @@ namespace WhoseShoutWebService.Models
         public DateTime LastShoutUtc { get; set; }
         public string ShoutSocialID { get; set; }
         public AuthType AuthType { get; set; }
+        public String AvatarUrl { get; set; }
 
         public override string ToString()
         {
