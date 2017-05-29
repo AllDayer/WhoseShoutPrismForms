@@ -36,6 +36,12 @@ namespace WhoseShoutFormsPrism.ViewModels
                 "#37474f",//BlueGrey
             };
 
+        public List<FileImageSource> Icons = new List<FileImageSource>()
+        {
+              (FileImageSource)ImageSource.FromFile("ic_coffee_outline_white_48dp.png"),
+              (FileImageSource)ImageSource.FromFile("ic_food_croissant_white_48dp.png")
+        };
+
         public MainViewModel()
         {
             ServiceApi = new ServiceApi();

@@ -14,5 +14,6 @@ namespace WhoseShoutFormsPrism.Models
         public bool TrackCost { get; set; }
         public List<ShoutUser> ShoutUsers { get; set; }
         public List<Shout> Shouts { get; set; }
+        public ShoutGroupIcon GroupIcon { get; set; }
     }
 }

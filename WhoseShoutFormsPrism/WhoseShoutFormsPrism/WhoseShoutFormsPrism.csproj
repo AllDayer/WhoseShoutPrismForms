@@ -40,15 +40,18 @@
     <Compile Include="Controls\GridListView.cs" />
     <Compile Include="Controls\RepeaterView.cs" />
     <Compile Include="CurrentApp.cs" />
+    <Compile Include="Data\Enums.cs" />
     <Compile Include="Helpers\DateTimeToStringConverter.cs" />
     <Compile Include="Helpers\FileStorage.cs" />
     <Compile Include="Helpers\HttpClientExtension.cs" />
+    <Compile Include="Helpers\IconIndexConverter.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Models\Dto\ShoutDto.cs" />
     <Compile Include="Models\Dto\ShoutGroupDto.cs" />
     <Compile Include="Models\Dto\ShoutUserDto.cs" />
     <Compile Include="Models\Shout.cs" />
     <Compile Include="Models\ShoutGroup.cs" />
+    <Compile Include="Models\ShoutGroupIcon.cs" />
     <Compile Include="Models\ShoutUser.cs" />
     <Compile Include="Models\SocialUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -211,9 +214,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Views\ShoutSummaryGroupCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

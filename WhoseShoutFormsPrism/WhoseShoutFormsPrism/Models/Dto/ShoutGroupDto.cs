@@ -12,6 +12,7 @@ namespace WhoseShoutWebService.Models
         public bool TrackCost { get; set; }
         public List<ShoutUserDto> Users { get; set; }
         public List<ShoutDto> Shouts { get; set; }
+        public int ShoutGroupIconIndex { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public string Colour { get; set; }

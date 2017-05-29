@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              xmlns:control="clr-namespace:WhoseShoutFormsPrism.Controls;assembly=WhoseShoutFormsPrism"
+             xmlns:helper="clr-namespace:WhoseShoutFormsPrism.Helpers;assembly=WhoseShoutFormsPrism"
              xmlns:circle="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
              x:Class="WhoseShoutFormsPrism.Views.ShoutSummaryGroupCard"
              HorizontalOptions="CenterAndExpand">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <helper:IconIndexConverter x:Key="IconIndexConverter"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
     <ContentView.Content>
         <!--<StackLayout BackgroundColor="#f5f5f5">-->
         <Grid >
@@ -49,7 +55,7 @@
                     <!--<Label Text="{Binding ShoutName}" TextColor="White" HorizontalOptions="CenterAndExpand" Grid.Column="1" />-->
 
 
-                    <Image x:Name="categoryImage" Source="ic_coffee_outline_white_48dp" HorizontalOptions="End" Grid.Column="2" />
+                    <Image x:Name="categoryImage" Source="{Binding ShoutGroupIconIndex, Converter={StaticResource IconIndexConverter}}" HorizontalOptions="End" Grid.Column="2" />
                     <!--<circle:CircleImage x:Name="circle" Source="ic_plus_white_18dp.png" Aspect="AspectFit" FillColor="#FF5722" HeightRequest="50" WidthRequest="50" HorizontalOptions="End"/>-->
                     <!--</StackLayout>-->
                 </Grid>

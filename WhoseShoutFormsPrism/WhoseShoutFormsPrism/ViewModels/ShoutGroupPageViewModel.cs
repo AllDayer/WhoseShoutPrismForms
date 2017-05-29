@@ -27,6 +27,7 @@ namespace WhoseShoutFormsPrism.ViewModels
         public DelegateCommand ClickIcon { get; }
         public DelegateCommand<int?> RemoveUserCommand { get; }
         public Command<object> ClickColourCommand { get; }
+        public Command<object> ClickIconCommand { get; }
         public bool ShowColours { get; set; }
         public bool ShowIcons { get; set; }
 
@@ -41,8 +42,8 @@ namespace WhoseShoutFormsPrism.ViewModels
         public ShoutGroupPageViewModel(INavigationService navigationService, IEventAggregator eventAggregator) : base(navigationService)
         {
             Button b = new Button();
-            var x1 = (FileImageSource)ImageSource.FromFile("ic_food_croissant_white_48dp.png");
             var x2 = (FileImageSource)ImageSource.FromFile("ic_coffee_outline_white_48dp.png");
+            var x1 = (FileImageSource)ImageSource.FromFile("ic_food_croissant_white_48dp.png");
             Icons.Add(x1);
             Icons.Add(x2);
 
@@ -53,6 +54,7 @@ namespace WhoseShoutFormsPrism.ViewModels
             CancelCommand = new DelegateCommand(OnCancelCommand);
             ClickColourCommand = new Command<object>(OnClickColourCommand);
             ClickColour = new DelegateCommand(OnClickColour);
+            ClickIconCommand = new Command<object>(OnClickIconCommand);
             ClickIcon = new DelegateCommand(OnClickIcon);
             RemoveUserCommand = new DelegateCommand<int?>(OnRemoveUserCommand);
             UsersInGroup.Add(new ShoutUserDto());
@@ -83,6 +85,7 @@ namespace WhoseShoutFormsPrism.ViewModels
                 Group.Name = ShoutName;
                 Group.Users = UsersInGroup.ToList();
                 Group.TrackCost = TrackCost;
+                Group.ShoutGroupIconIndex = SelectedIconIndex;
                 await CurrentApp.Current.MainViewModel.ServiceApi.PutGroup(Group);
 
                 OnGoBack();
@@ -145,6 +148,20 @@ namespace WhoseShoutFormsPrism.ViewModels
             }
         }
 
+        private int m_SelectedIconIndex = 0;
+        public int SelectedIconIndex
+        {
+            get
+            {
+                return m_SelectedIconIndex;
+            }
+            set
+            {
+                m_SelectedIconIndex = value;
+                RaisePropertyChanged(nameof(SelectedIconIndex));
+            }
+        }
+
         private bool m_TrackCost = true;
         public bool TrackCost
         {
@@ -169,6 +186,12 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
             ShowColours = !ShowColours;
             RaisePropertyChanged(nameof(ShowColours));
+        }
+
+        void OnClickIconCommand(object s)
+        {
+            SelectedIconIndex = (int)s;
+            OnClickIcon();
         }
 
         public void OnClickIcon()

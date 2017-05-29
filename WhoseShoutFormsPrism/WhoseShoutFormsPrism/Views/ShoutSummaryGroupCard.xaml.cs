@@ -34,11 +34,11 @@ namespace WhoseShoutFormsPrism.Views
             //WebImage.Source = Settings.Current.AvatarUrl;
             //circle2.Source = Settings.Current.AvatarUrl;
 
-            Random r = new Random();
-            if (r.Next(2) % 2 == 0)
-            {
-                categoryImage.Source = "ic_food_croissant_white_48dp.png";
-            }
+            //Random r = new Random();
+            //if (r.Next(2) % 2 == 0)
+            //{
+            //    categoryImage.Source = "ic_food_croissant_white_48dp.png";
+            //}
             //BuyRound.Clicked += BuyRound_Clicked;
         }
 

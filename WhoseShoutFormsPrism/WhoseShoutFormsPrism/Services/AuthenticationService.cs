@@ -50,7 +50,10 @@ namespace WhoseShoutFormsPrism.Services
                 if (!String.IsNullOrEmpty(Settings.Current.SocialUserID))
                 {
                     userDto = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutUserBySocial(Settings.Current.SocialUserID);
-                    Settings.Current.UserGuid = userDto.ID;
+                    if (userDto != null)
+                    {
+                        Settings.Current.UserGuid = userDto.ID;
+                    }
                 }                
                 
                 if (userDto == null ||

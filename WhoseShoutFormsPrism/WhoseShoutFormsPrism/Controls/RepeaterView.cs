@@ -127,29 +127,32 @@ namespace WhoseShoutFormsPrism.Controls
 
             var control = bindable as RepeaterView<T>;
             control.Children.Clear();
-            control.ItemsSource.CollectionChanged += control.ItemsSource_CollectionChanged;
-
-            if (control == null)
+            if (control.ItemsSource != null)
             {
-                throw new Exception(
-                    "Invalid bindable object passed to RepeaterView::ItemsChanged expected a RepeaterView<T> received a "
-                    + bindable.GetType().Name);
-            }
+                control.ItemsSource.CollectionChanged += control.ItemsSource_CollectionChanged;
 
-            if (newValue != null)
-            {
-                int i = 0;
-                foreach (var t in ((ObservableCollection<T>)newValue).Where(x => x != null))
+                if (control == null)
                 {
+                    throw new Exception(
+                        "Invalid bindable object passed to RepeaterView::ItemsChanged expected a RepeaterView<T> received a "
+                        + bindable.GetType().Name);
+                }
 
-                    var view = control.ViewFor(t, control.ParentVM, CurrentApp.Current.MainViewModel.RandomColour(), i);
-                    if (view != null)
+                if (newValue != null)
+                {
+                    int i = 0;
+                    foreach (var t in ((ObservableCollection<T>)newValue).Where(x => x != null))
                     {
-                        //view.BackgroundColor = Color.FromHex("#2980b9");
-                        //view.BackgroundColor = Color.Red;
-                        control.Children.Add(view);
+
+                        var view = control.ViewFor(t, control.ParentVM, CurrentApp.Current.MainViewModel.RandomColour(), i);
+                        if (view != null)
+                        {
+                            //view.BackgroundColor = Color.FromHex("#2980b9");
+                            //view.BackgroundColor = Color.Red;
+                            control.Children.Add(view);
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
         }

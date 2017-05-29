@@ -81,11 +81,14 @@ namespace WhoseShoutFormsPrism.ViewModels
         {
             //ShoutGroupDto = ShoutGroups.First();
             ShoutGroupDto = Settings.Current.ShoutGroups?.FirstOrDefault();
-            foreach (ShoutGroupDto sg in Settings.Current.ShoutGroups)
+            if (ShoutGroupDto != null)
             {
-                //Move to a better call
-                ShoutsForGroup = await LoadShoutsForGroup(sg.ID.ToString());
-                NoGroups = false;
+                foreach (ShoutGroupDto sg in Settings.Current.ShoutGroups)
+                {
+                    //Move to a better call
+                    ShoutsForGroup = await LoadShoutsForGroup(sg.ID.ToString());
+                    NoGroups = false;
+                }
             }
         }
 

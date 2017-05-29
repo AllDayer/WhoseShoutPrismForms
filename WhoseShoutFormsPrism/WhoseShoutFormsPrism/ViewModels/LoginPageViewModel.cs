@@ -75,9 +75,12 @@ namespace WhoseShoutFormsPrism.ViewModels
             
             NavigationParameters nav = new NavigationParameters();
             var groups = await CurrentApp.Current.MainViewModel.ServiceApi.GetShoutGroups(Settings.Current.UserGuid.ToString());
-            Settings.Current.ShoutGroups = new System.Collections.ObjectModel.ObservableCollection<ShoutGroupDto>(groups);
+            if (groups != null)
+            {
+                Settings.Current.ShoutGroups = new System.Collections.ObjectModel.ObservableCollection<ShoutGroupDto>(groups);
 
-            await CurrentApp.Current.MainViewModel.RefreshGroupColours();
+                await CurrentApp.Current.MainViewModel.RefreshGroupColours();
+            }
 
             await _navigationService.NavigateAsync("/NavigationPage/SummaryPage");
         }
